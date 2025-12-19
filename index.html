@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نبض | Nabd - مجتمع التعافي والونس</title>
+    <meta name="description" content="مساحة آمنة للدعم النفسي، التعافي، والونس النظيف.">
+    
+    <!-- الخطوط والأيقونات -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Outfit:wght@300;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- المتغيرات ونظام الألوان (Dark GenZ Aesthetic) --- */
+        :root {
+            --bg-dark: #030305;
+            --primary: #8a2be2;      /* بنفسجي نبض */
+            --primary-glow: #a64dff;
+            --accent: #00f2ff;       /* سيان نيون */
+            --danger: #ff0055;       /* أحمر للقوانين */
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --font-ar: 'Cairo', sans-serif;
+            --font-en: 'Outfit', sans-serif;
+        }
+
+        /* --- أساسيات الصفحة --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-ar);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        /* --- شاشة التحميل (Preloader) --- */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.5s ease;
+        }
+        .heartbeat-loader {
+            font-size: 4rem;
+            color: var(--primary);
+            animation: heartBeat 1.2s infinite ease-in-out;
+        }
+        .loader-text {
+            margin-top: 20px;
+            font-family: var(--font-en);
+            letter-spacing: 2px;
+            font-size: 1.2rem;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        /* --- خلفية الكانفاس --- */
+        canvas#matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        /* --- الناف بار --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(3, 3, 5, 0.7);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: 0.3s;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .logo i {
+            color: var(--primary);
+            animation: heartBeat 2s infinite;
+        }
+        .logo span {
+            font-family: var(--font-en);
+            font-weight: 300;
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+        }
+        .nav-menu a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            position: relative;
+        }
+        .nav-menu a:hover, .nav-menu a.active {
+            color: var(--text-main);
+        }
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: 0.3s;
+        }
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        .join-btn {
+            padding: 10px 25px;
+            border-radius: 30px;
+            background: linear-gradient(45deg, var(--primary), #5e17a3);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+        .join-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(138, 43, 226, 0.6);
+            border-color: var(--accent);
+        }
+
+        /* --- الهيرو سكشن --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 100px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* تدرج لوني في الخلفية */
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            filter: blur(150px);
+            opacity: 0.3;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(0, 242, 255, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-family: var(--font-en);
+            letter-spacing: 1px;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+        .hero h1 span {
+            display: block;
+            background: linear-gradient(to right, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero h1 .highlight {
+            color: var(--primary);
+            -webkit-text-fill-color: var(--primary);
+            text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            line-height: 1.8;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* --- الأقسام --- */
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .section-title span {
+            color: var(--primary);
+            font-family: var(--font-en);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+        }
+
+        /* --- قسم المميزات (التعافي والونس) --- */
+        .features {
+            padding: 80px 5%;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            border-radius: 20px;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            background: rgba(138, 43, 226, 0.05);
+        }
+        .card i {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+            background: rgba(0, 242, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- قسم القوانين (الخطوط الحمراء) --- */
+        .rules-section {
+            padding: 80px 5%;
+            background: linear-gradient(180deg, var(--bg-dark), rgba(255, 0, 85, 0.05), var(--bg-dark));
+        }
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .rule-card {
+            background: rgba(20, 0, 5, 0.6);
+            border-right: 3px solid var(--danger);
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: 0.3s;
+        }
+        .rule-card:hover {
+            background: rgba(255, 0, 85, 0.1);
+            transform: translateX(-5px);
+        }
+        .rule-card i {
+            color: var(--danger);
+            font-size: 1.2rem;
+        }
+        .rule-card h4 {
+            font-size: 1.1rem;
+            color: #ffccd5;
+        }
+
+        /* --- قسم النواة (Elite Hint) --- */
+        .elite-hint {
+            text-align: center;
+            padding: 60px 20px;
+            margin: 50px 5%;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.1) 0%, transparent 70%);
+            border: 1px dashed var(--glass-border);
+            border-radius: 20px;
+        }
+        .elite-hint i {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        .elite-hint p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        /* --- الفوتر --- */
+        footer {
+            background: #000;
+            padding: 50px 5% 20px;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+        .footer-logo {
+            font-family: var(--font-en);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: inline-block;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .copyright {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        /* --- الأنيميشن --- */
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.1); }
+            70% { transform: scale(1); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- الموبايل --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.8rem; }
+            .nav-menu { display: none; } /* تبسيطاً للكود */
+            .join-btn { display: none; }
+            .logo { flex-grow: 1; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شاشة التحميل -->
+    <div class="preloader" id="preloader">
+        <i class="fa-solid fa-heart-pulse heartbeat-loader"></i>
+        <div class="loader-text">Nabd Loading...</div>
+    </div>
+
+    <!-- خلفية تفاعلية -->
+    <canvas id="matrix-bg"></canvas>
+
+    <!-- الهيدر -->
+    <header>
+        <a href="#" class="logo">
+            <i class="fa-solid fa-heart-pulse"></i>
+            نبض <span>Nabd</span>
+        </a>
+        <nav class="nav-menu">
+            <a href="#about">الرسالة</a>
+            <a href="#features">ليه نبض؟</a>
+            <a href="#rules">الخطوط الحمراء</a>
+        </nav>
+        <a href="https://t.me/Nabd4U" target="_blank" class="join-btn">
+            <i class="fa-brands fa-telegram"></i> انضم للمجتمع
+        </a>
+    </header>
+
+    <!-- الهيرو (الواجهة) -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="status-badge reveal">GEN-Z COMMUNITY 💎</div>
+            <h1 class="reveal">
+                مش مجرد جروب شات
+                <span class="highlight">ده مجتمع تعافي وونس</span>
+            </h1>
+            <p class="reveal">
+                مساحة آمنة (Safe Zone) بعيداً عن دوشة العالم وأحكامه. هنا بنسمعك، بنفهمك، وبنساعد بعض نلاقي الطريق الصح ونثبت عليه.
+                لا شقط، لا تجاوز، فقط دعم حقيقي.
+            </p>
+            <div class="hero-actions reveal">
+                <a href="#" class="join-btn" style="display:inline-flex; align-items:center; gap:10px; font-size:1.1rem; padding:15px 40px;">
+                    ابدأ رحلتك معانا <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المميزات -->
+    <section class="features" id="features">
+        <div class="section-title reveal">
+            <span>Core Values</span>
+            <h2>إيه اللي بيميز نبض؟</h2>
+        </div>
+        <div class="grid-container">
+            <div class="card reveal">
+                <i class="fa-solid fa-brain"></i>
+                <h3>تعافي ودعم نفسي</h3>
+                <p>إحنا مش دكاترة، بس إحنا "عيلة" بتسند بعض. بنشارك تجاربنا، بنقاوم الإدمان والعادات الغلط سوا، وبنخلق بديل نظيف.</p>
+            </div>
+            <div class="card reveal">
+                <i class="fa-solid fa-user-secret"></i>
+                <h3>خصوصية مطلقة</h3>
+                <p>هويتك سرك. في نبض، مش محتاج تقول اسمك الحقيقي ولا مكانك. الأمان والسرية هما الأساس عشان تعرف تفضفض.</p>
+            </div>
+            <div class="card reveal">
+                <i class="fa-solid fa-users"></i>
+                <h3>مجتمع "رايق"</h3>
+                <p>الجو هنا Chill Zone. هزار، مناقشات، ألعاب، ومذاكرة. بنحاول نملى وقت الفراغ بحاجة مفيدة وممتعة.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم القوانين -->
+    <section class="rules-section" id="rules">
+        <div class="section-title reveal">
+            <span style="color: var(--danger);">The Red Lines</span>
+            <h2>قواعدنا صارمة لحمايتك</h2>
+        </div>
+        <div class="rules-grid">
+            <div class="rule-card reveal">
+                <i class="fa-solid fa-ban"></i>
+                <h4>ممنوع المحتوى الجنسي تماماً</h4>
+            </div>
+            <div class="rule-card reveal">
+                <i class="fa-solid fa-user-lock"></i>
+                <h4>ممنوع طلبات الخاص والتعارف</h4>
+            </div>
+            <div class="rule-card reveal">
+                <i class="fa-solid fa-hand-fist"></i>
+                <h4>ممنوع التنمر أو الإهانة</h4>
+            </div>
+            <div class="rule-card reveal">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h4>احترام خصوصية الأعضاء خط أحمر</h4>
+            </div>
+        </div>
+    </section>
+
+    <!-- إشارة للنواة الصلبة -->
+    <div class="elite-hint reveal">
+        <i class="fa-regular fa-gem"></i>
+        <h3>Managed by Nabd Elite 💎</h3>
+        <p>يُدار هذا المجتمع بواسطة فريق "النواة" لضمان بيئة آمنة ومستقرة للجميع.</p>
+    </div>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="footer-logo">Nabd</div>
+        <p style="color: #888;">مجتمع غير ربحي يهدف للدعم النفسي والاجتماعي.</p>
+        <div class="copyright">
+            &copy; 2025 All Rights Reserved to Nabd Community.
+        </div>
+    </footer>
+
+    <!-- سكريبتات الجافاسكريبت -->
+    <script>
+        // --- 1. إخفاء شاشة التحميل ---
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 500);
+            }, 1500); // مدة التحميل الوهمية
+        });
+
+        // --- 2. رسم خلفية الـ Pulse (Canvas) ---
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        // نقاط الخط
+        const lines = [];
+        const numLines = 3;
+
+        for (let i = 0; i < numLines; i++) {
+            lines.push({
+                y: Math.random() * height,
+                speed: 1 + Math.random() * 2,
+                offset: Math.random() * 100
+            });
+        }
+
+        function animateBg() {
+            ctx.clearRect(0, 0, width, height);
+            
+            lines.forEach(line => {
+                ctx.beginPath();
+                ctx.moveTo(0, line.y);
+                
+                for (let x = 0; x < width; x+=5) {
+                    // معادلة لمحاكاة نبضات عشوائية
+                    const y = line.y + Math.sin((x + line.offset) * 0.01) * 20 + 
+                              (Math.random() > 0.98 ? (Math.random() - 0.5) * 50 : 0); // Spikes
+                    ctx.lineTo(x, y);
+                }
+
+                ctx.strokeStyle = `rgba(138, 43, 226, ${0.1 + Math.random() * 0.1})`;
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                line.offset += line.speed;
+            });
+
+            requestAnimationFrame(animateBg);
+        }
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        animateBg();
+
+        // --- 3. أنيميشن السكرول (Scroll Reveal) ---
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.15 });
+
+        revealElements.forEach(el => scrollObserver.observe(el));
+    </script>
+</body>
+</html>
