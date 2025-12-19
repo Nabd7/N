@@ -1,4 +1,6 @@
-# Nabd (نبض) | Community & Recovery Safe Zone 💎
+<div align="center">
+  <h1>Nabd | Community & Recovery Safe Zone 💎</h1>
+</div>
 
 ![Nabd Banner](assets/Banner.png)
 
