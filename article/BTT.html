@@ -4,48 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>من نحن | حكاية نبض</title>
+    <title>ما وراء الميول | رحلة التعافي</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     
-    <!-- FontAwesome Icons -->
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         /* --- المتغيرات والتأسيس --- */
         :root {
-            --primary: #8A2BE2; /* بنفسجي */
-            --secondary: #00d4ff; /* أزرق نيون */
-            --bg-dark: #0f0f13;
-            --bg-lighter: #1a1a24;
-            --text-main: #ffffff;
-            --text-muted: #b0b0b0;
-            --font-main: 'Cairo', sans-serif;
+            --primary: #8A2BE2;      /* بنفسجي */
+            --secondary: #00d4ff;    /* أزرق نيون */
+            --bg-dark: #0f0f13;      /* خلفية سوداء */
+            --bg-paper: #16161d;     /* خلفية المقال */
+            --text-main: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --line-height: 1.9;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: var(--font-main);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; text-decoration: none; }
 
         body {
+            font-family: 'Cairo', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-main);
             overflow-x: hidden;
-            line-height: 1.8;
         }
 
-        /* --- شريط التمرير المخصص --- */
+        /* --- شريط التمرير --- */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
         ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
 
-        /* --- الهيدر (Navbar) --- */
+        /* --- الناف بار (مبسط) --- */
         nav {
             padding: 20px 5%;
             display: flex;
@@ -53,206 +48,213 @@
             align-items: center;
             background: rgba(15, 15, 19, 0.95);
             position: fixed;
-            width: 100%;
             top: 0;
+            width: 100%;
             z-index: 1000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 900;
-            color: var(--text-main);
-            text-decoration: none;
+            color: white;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+        }
+        .logo i { color: var(--primary); animation: beat 2s infinite; }
+
+        .back-link {
+            color: var(--text-muted);
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .back-link:hover { color: var(--secondary); }
+
+        /* --- رأس المقال (Header) --- */
+        .article-header {
+            padding: 150px 5% 80px;
+            background: radial-gradient(circle at top, #2e1052 0%, var(--bg-dark) 80%);
+            text-align: center;
+            position: relative;
         }
 
-        .logo i { color: var(--primary); animation: beat 1.5s infinite; }
+        .article-tag {
+            background: rgba(138, 43, 226, 0.2);
+            color: var(--secondary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
 
-        .nav-btn {
-            padding: 8px 25px;
-            border: 2px solid var(--primary);
-            color: var(--text-main);
-            text-decoration: none;
+        .article-header h1 {
+            font-size: 3rem;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, #b0b0b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .article-meta {
+            color: var(--text-muted);
+            font-size: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .article-meta i { margin-left: 5px; color: var(--primary); }
+
+        /* --- جسم المقال --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px 100px;
+        }
+
+        .content {
+            background: var(--bg-paper);
+            padding: 50px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            font-size: 1.15rem;
+            line-height: var(--line-height);
+        }
+
+        /* تنسيق النصوص */
+        .content h2 {
+            color: var(--secondary);
+            margin: 40px 0 20px;
+            font-size: 1.8rem;
+            border-right: 4px solid var(--primary);
+            padding-right: 15px;
+        }
+
+        .content h3 {
+            color: white;
+            margin: 30px 0 15px;
+            font-size: 1.4rem;
+        }
+
+        .content p {
+            margin-bottom: 20px;
+            color: #d1d1d1;
+        }
+
+        .content strong {
+            color: white;
+            font-weight: 700;
+        }
+
+        .content ul {
+            margin-bottom: 30px;
+            padding-right: 20px;
+        }
+
+        .content li {
+            margin-bottom: 10px;
+            color: #d1d1d1;
+            position: relative;
+        }
+
+        .content li::before {
+            content: '•';
+            color: var(--primary);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-right: -1em;
+        }
+
+        /* بوكس مميز (روشتة التعافي) */
+        .highlight-box {
+            background: rgba(138, 43, 226, 0.08);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* اقتباس */
+        .quote {
+            text-align: center;
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--secondary);
+            margin: 50px 0;
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* --- الفوتر والدعوة --- */
+        .author-box {
+            margin-top: 60px;
+            padding: 30px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .author-box i {
+            font-size: 3rem;
+            color: var(--primary);
+        }
+
+        .join-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(45deg, var(--primary), #5b1aa8);
+            color: white;
+            padding: 15px;
             border-radius: 50px;
             font-weight: 700;
-            transition: 0.3s;
-        }
-
-        .nav-btn:hover {
-            background: var(--primary);
-            box-shadow: 0 0 15px var(--primary);
-        }
-
-        /* --- الهيرو (العنوان الرئيسي) --- */
-        .page-header {
-            height: 60vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at center, #2e1052 0%, var(--bg-dark) 80%);
-            text-align: center;
-            padding: 0 20px;
-            position: relative;
-        }
-
-        .page-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100px;
-            background: linear-gradient(to top, var(--bg-dark), transparent);
-        }
-
-        .header-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeUp 1s forwards 0.5s;
-        }
-
-        .header-content span { color: var(--secondary); }
-
-        .header-content p {
             font-size: 1.2rem;
-            color: var(--text-muted);
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeUp 1s forwards 0.8s;
-        }
-
-        /* --- المقال (المحتوى الرئيسي) --- */
-        .article-container {
-            max-width: 900px;
-            margin: -50px auto 50px;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .article-card {
-            background: var(--bg-lighter);
-            padding: 50px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            transform: translateY(50px);
-            transition: 1s ease;
-        }
-
-        .article-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .article-text h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: var(--primary);
-            position: relative;
-            display: inline-block;
-        }
-
-        .article-text p {
-            margin-bottom: 25px;
-            font-size: 1.1rem;
-            color: #dcdcdc;
-            line-height: 1.9;
-        }
-
-        .highlight {
-            color: var(--secondary);
-            font-weight: 700;
-        }
-
-        /* --- قسم القيم (Values) --- */
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
-        }
-
-        .value-box {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            border: 1px solid transparent;
+            margin-top: 30px;
             transition: 0.3s;
         }
-
-        .value-box:hover {
-            border-color: var(--primary);
+        .join-btn:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.4);
         }
 
-        .value-box i {
-            font-size: 2rem;
-            color: var(--secondary);
-            margin-bottom: 10px;
-        }
-
-        .value-box h3 {
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-
-        .value-box p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 0;
-        }
-
-        /* --- اقتباس --- */
-        .quote {
-            margin: 40px 0;
-            padding: 30px;
-            border-right: 5px solid var(--secondary);
-            background: rgba(0, 212, 255, 0.05);
-            font-style: italic;
-            font-size: 1.2rem;
-            border-radius: 0 10px 10px 0;
-        }
-
-        /* --- الفوتر --- */
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            background: var(--bg-lighter);
-        }
-
-        .footer-socials a {
-            color: var(--text-main);
-            font-size: 1.5rem;
-            margin: 0 10px;
-            transition: 0.3s;
-        }
-
-        .footer-socials a:hover { color: var(--primary); }
-
-        /* --- الأنيميشن --- */
+        /* --- أنيميشن --- */
         @keyframes beat {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.2); }
         }
 
-        @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.8s;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        /* --- التجاوب --- */
+        /* --- الموبايل --- */
         @media (max-width: 768px) {
-            .header-content h1 { font-size: 2.5rem; }
-            .article-card { padding: 30px 20px; }
+            .article-header h1 { font-size: 2.2rem; }
+            .content { padding: 25px; font-size: 1.05rem; }
         }
     </style>
 </head>
@@ -263,93 +265,112 @@
         <a href="index.html" class="logo">
             <i class="fa-solid fa-heart-pulse"></i> نبض
         </a>
-        <a href="https://t.me/Nabd4U" class="nav-btn">انضم للجروب</a>
+        <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-right"></i> الرجوع للرئيسية</a>
     </nav>
 
-    <!-- الهيدر -->
-    <header class="page-header">
-        <div class="header-content">
-            <h1>عن مجتمع <span>نبض</span></h1>
-            <p>مش مجرد جروب.. دي رحلة تعافي، ونس، وحياة.</p>
+    <!-- رأس المقال -->
+    <header class="article-header">
+        <span class="article-tag reveal">الوعي والتعافي</span>
+        <h1 class="reveal">ما وراء "الميول".. رحلة البحث عن الذات المفقودة</h1>
+        <div class="article-meta reveal">
+            <span><i class="fa-solid fa-pen-nib"></i> فريق نبض</span>
+            <span><i class="fa-regular fa-clock"></i> 5 دقائق قراءة</span>
         </div>
     </header>
 
-    <!-- محتوى المقال -->
-    <main class="article-container">
-        <div class="article-card">
-            <div class="article-text">
-                <h2>إحنا مين؟ وليه "نبض"؟</h2>
-                <p>
-                    في وسط دوشة العالم، وزحمة الأحكام، والضغوط اللي بنعيشها كل يوم، كان لازم يكون فيه مكان نفصل فيه. مكان نرجع فيه لطبيعتنا من غير أقنعة، ومن غير خوف. من هنا اتولدت فكرة <span class="highlight">"نبض"</span>.
-                </p>
-                <p>
-                    إحنا مجموعة من الشباب قررنا نخلق <strong>Chill Zone</strong> آمنة، هدفها الأساسي هو "الدعم النفسي" والوعي الحقيقي. إحنا مش دكاترة ولا معالجين (وإن كان دورنا بيكملهم)، إحنا "رفقاء رحلة". بنحاول نفهم نفسنا، نواجه ميولنا غير المرغوبة، ونتعافى سوا عشان نعيش حياة سوية ومريحة.
-                </p>
+    <!-- المحتوى -->
+    <div class="container">
+        <article class="content reveal">
+            <p class="intro">
+                في وسط الضجيج العالمي اللي بيحاول يقنعك إن "هويتّك" هي ميولك، وإن الحل الوحيد هو "التقبّل والاستسلام"، بنقف في <strong>"نبض"</strong> عشان نسأل سؤال أعمق، سؤال يمكن خايف تواجه بيه نفسك من سنين:
+                <br><em>"هو أنا فعلاً كده؟ ولا أنا بقيت كده نتيجة حاجات حصلتلي؟"</em>
+            </p>
+            <p>
+                التعافي مش مجرد "توبة" من ذنب، ولا هو "كبت" لمشاعر حقيقية.. التعافي هو رحلة استكشاف لـ "الجرح الأصلي".
+            </p>
 
-                <div class="quote">
-                    <i class="fa-solid fa-quote-right" style="color: var(--secondary); margin-left: 10px;"></i>
-                    نبض هو المكان اللي صوتك فيه مسموع، ومشاعرك مُقدّرة، وهويتك محمية. هنا.. إحنا بنطبطب على الروح، مش بنجلد الذات.
-                </div>
+            <h2>1. اللغز: الجنس كـ "مسكن للألم"</h2>
+            <p>
+                منهجية التعافي الحقيقية (اللي استلهمناها من تجارب "براء" والمدارس النفسية التحليلية) بتقول حقيقة صادمة:
+                <strong>المثلية في جوهرها ليست مشكلة جنسية، بل هي مشكلة عاطفية تم إضفاء طابع جنسي عليها.</strong>
+            </p>
+            <p>
+                الرغبة الملحة اللي بتحس بيها تجاه نفس الجنس، غالبًا ما بتكونش رغبة في "الجسد" قد ما هي رغبة في "الصفة" اللي الجسد ده بيمثلها.
+            </p>
+            <ul>
+                <li>أنت مش عايز الشخص ده.. أنت عايز "الرجولة" اللي أنت حاسس إنها ناقصاك.</li>
+                <li>أنت مش عايز العلاقة دي.. أنت عايز "الحضن والأمان" اللي افتقدته من الأب أو الأخ أو الأقران في طفولتك.</li>
+            </ul>
 
-                <h2>فلسفتنا في كلمتين</h2>
-                <p>
-                    إحنا مؤمنين إن <strong>"الوعي هو أول طريق التغيير"</strong>. عشان كده مش بنكتفي بالفضفضة، إحنا بنشارك محتوى يوعي، وبنناقش أفكار بتساعدنا نفهم جذور مشاكلنا.
-                    بنرفض الانجراف وراء الموجة السائدة اللي بتحاول تطبّع مع الغلط، وفي نفس الوقت بنرفض القسوة المفرطة. إحنا اخترنا الطريق التالت: <span class="highlight">طريق الفهم، الاحتواء، والتعافي.</span>
-                </p>
+            <h2>2. الجذور: أين بدأ الشرخ؟</h2>
+            <p>محدش بيصحى من النوم يقرر يغير فطرته. الحكاية بتبدأ بدري أوي:</p>
+            <ul>
+                <li><strong>الجوع الأبوي (Father Hunger):</strong> لما يكون الأب غايب (جسديًا أو شعوريًا)، أو قاسي، أو ضعيف، الطفل بيفقد "النموذج الذكوري" اللي المفروض يتماهى معاه. بيحس إنه "غريب" عن عالم الرجالة.</li>
+                <li><strong>الغربة الدفاعية:</strong> الطفل الحساس لما بيتعرض لتنمر أو رفض من الأطفال الذكور اللي في سنه، بياخد قرار غير واعي: <em>"أنا مش زيهم، أنا مختلف"</em>. ومن هنا بيحصل الانفصال عن الهوية الذكورية.</li>
+                <li><strong>التقديس بدل التماهي:</strong> لما تكبر، "عالم الرجالة" اللي كنت خايف منه أو محروم منه، بيتحول لـ "شيء غامض وجذاب". وبدل ما تكون واحد منهم، بتبدأ تشتهيهم عشان تعوض النقص اللي جواك.</li>
+            </ul>
 
-                <h2>قيمنا الأساسية</h2>
-                <div class="values-grid">
-                    <div class="value-box">
-                        <i class="fa-solid fa-user-shield"></i>
-                        <h3>الأمان التام</h3>
-                        <p>خصوصيتك خط أحمر. لا نسأل عن أسماء ولا صور. أنت هنا في أمان.</p>
-                    </div>
-                    <div class="value-box">
-                        <i class="fa-solid fa-hands-holding-circle"></i>
-                        <h3>الدعم الأخوي</h3>
-                        <p>كلنا في مركب واحدة. بنسند بعض وقت الضعف، وبنشجع وقت القوة.</p>
-                    </div>
-                    <div class="value-box">
-                        <i class="fa-solid fa-brain"></i>
-                        <h3>الوعي والنضج</h3>
-                        <p>بنتعامل بعقلية ناضجة. لا للمحتوى السطحي أو المؤذي.</p>
-                    </div>
-                    <div class="value-box">
-                        <i class="fa-solid fa-ban"></i>
-                        <h3>بيئة نظيفة</h3>
-                        <p>زيرو تجاوزات. مجتمعنا خالي من أي محتوى جنسي أو غير لائق.</p>
-                    </div>
-                </div>
-
-                <br><br>
-                <h2>رسالتنا ليك</h2>
-                <p>
-                    لو حسيت في يوم إنك تايه، أو إنك بتحارب معركة لوحدك ومحدش فاهمك.. افتكر إن <strong>"نبض"</strong> موجودة عشانك. إحنا هنا عشان نقولك: <span class="highlight">أنت مش لوحدك، وفيه أمل، وفيه طريق تاني ممكن نمشيه سوا.</span>
-                </p>
-                <p style="text-align: center; margin-top: 30px;">
-                    <strong>أهلاً بيك في عيلتك التانية.. أهلاً بيك في نبض. ❤️</strong>
-                </p>
+            <div class="quote">
+                "الميول مكتسبة وليست جينية حتمية. هي نتاج 'تراكمات' سنين من الألم، والاحتياج، والهروب."
             </div>
-        </div>
-    </main>
 
-    <!-- الفوتر -->
-    <footer>
-        <div class="footer-socials">
-            <a href="https://t.me/Nabd4U"><i class="fa-brands fa-telegram"></i></a>
-            <a href="https://t.me/Nabd4U"><i class="fa-brands fa-twitter"></i></a>
-            <a href="https://t.me/Nabd4U"><i class="fa-brands fa-instagram"></i></a>
-        </div>
-        <p style="margin-top: 15px; color: #777;">جميع الحقوق محفوظة لمجتمع نبض © 2025</p>
-    </footer>
+            <h2>3. وهم "أنا اتخلقت كده"</h2>
+            <p>
+                الجملة دي هي أكبر سجن ممكن تحبس نفسك فيه. العلم الحديث والنفسي بيؤكد إن الميول قابلة للتعديل والتغيير.
+                ومادام الشيء "مكتسب"، يبقى ممكن "تعديله". مش بقول إن الموضوع سهل، بس بقول إنه <strong>ممكن</strong>.
+            </p>
 
-    <!-- سكريبت الأنيميشن البسيط -->
+            <h2>4. التعافي: ليس "كبتًا" بل "إشباع"</h2>
+            <p>
+                في "نبض"، مفهومنا للتعافي مختلف. <strong>الكبت</strong> هو إنك تدفن مشاعرك وتعيش في صراع وتوتر، وده بيؤدي للانتكاس. أما <strong>التعافي</strong> فهو إنك تفهم "الاحتياج" اللي ورا الرغبة وتشبعه بطريق صحي.
+            </p>
+
+            <div class="highlight-box">
+                <h3><i class="fa-solid fa-file-medical"></i> روشتة التعافي (خارطة الطريق)</h3>
+                
+                <p><strong>1. الوعي (Awareness):</strong><br>
+                أول خطوة إنك تفصل بين "ذاتك الحقيقية" وبين "الميول". أنت لست ميولك. الميول دي مجرد "عرض" لمرض قديم اسمه "نقص التوكيد الذكوري".</p>
+
+                <p><strong>2. العلاقات الشافية (Healing Relationships):</strong><br>
+                الشفاء مش هيحصل وأنت منعزل. الشفاء بيحصل في "العلاقة". محتاج تبني صداقات ذكورية نظيفة. علاقات فيها أخوة، ونس، ودعم، من غير جنس.</p>
+
+                <p><strong>3. إعادة الاتصال بالله:</strong><br>
+                مش بمنطق "الخوف والجلد"، لكن بمنطق "الاستعانة". الله هو خالق الفطرة، وهو القادر على ترميمها.</p>
+
+                <p><strong>4. الصبر على الألم:</strong><br>
+                لازم تتقبل إن فيه "فترة انسحاب". الوجع ده هو "ألم النمو". كل مرة بتقاوم فيها رغبة ملحة، أنت بتبني "عضلة" جديدة في شخصيتك الحقيقية.</p>
+            </div>
+
+            <div class="author-box">
+                <i class="fa-solid fa-user-astronaut"></i>
+                <div>
+                    <h4>رسالة أخيرة..</h4>
+                    <p>في "نبض"، إحنا مش هنا عشان نحكم عليك. إحنا هنا عشان نقولك: <strong>أنت فيك "راجل" تاه منك في السكة، ودورنا إننا نساعدك تلاقيه تاني.</strong></p>
+                </div>
+            </div>
+
+            <a href="https://t.me/Nabd4U" class="join-btn">ابدأ رحلة التعافي معانا الآن <i class="fa-solid fa-paper-plane"></i></a>
+        </article>
+    </div>
+
     <script>
-        // إظهار المقال عند التحميل
-        window.addEventListener('load', () => {
-            const article = document.querySelector('.article-card');
-            article.classList.add('visible');
-        });
+        // تفعيل الأنيميشن عند السكرول
+        window.addEventListener('scroll', reveal);
+        function reveal() {
+            var reveals = document.querySelectorAll('.reveal');
+            for (var i = 0; i < reveals.length; i++) {
+                var windowheight = window.innerHeight;
+                var revealtop = reveals[i].getBoundingClientRect().top;
+                if (revealtop < windowheight - 100) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+        // تفعيل فوري لأول العناصر
+        reveal();
+        setTimeout(() => {
+            document.querySelectorAll('.article-header .reveal').forEach(el => el.classList.add('active'));
+        }, 100);
     </script>
 </body>
 </html>
