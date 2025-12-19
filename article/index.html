@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبة الوعي | نبض</title>
+    
+    <!-- الخطوط والأيقونات -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Outfit:wght@300;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- المتغيرات (نفس الهوية) --- */
+        :root {
+            --bg-dark: #030305;
+            --primary: #8a2be2;
+            --accent: #00f2ff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --font-ar: 'Cairo', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-ar);
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+        /* --- خلفية الكانفاس --- */
+        canvas#matrix-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.15;
+        }
+
+        /* --- الناف بار --- */
+        nav {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(3, 3, 5, 0.9);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-main);
+            text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .logo i { color: var(--primary); animation: beat 2s infinite; }
+
+        .back-home {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .back-home:hover { color: var(--primary); }
+
+        /* --- الهيدر --- */
+        .page-header {
+            text-align: center;
+            padding: 80px 20px 40px;
+            background: radial-gradient(circle at top, rgba(138, 43, 226, 0.15), transparent 70%);
+        }
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        .page-header span { color: var(--accent); }
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- الفلاتر (Filters) --- */
+        .filters-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            padding: 0 20px;
+        }
+
+        .filter-btn {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 10px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: var(--font-ar);
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* --- شبكة المقالات --- */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5% 100px;
+        }
+
+        .art-card {
+            background: rgba(20, 20, 25, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            text-decoration: none;
+            transition: 0.4s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(5px);
+        }
+
+        .art-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* صورة المقال (رمزية) */
+        .card-thumb {
+            height: 180px;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card-thumb i {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.05);
+            transition: 0.4s;
+        }
+
+        .art-card:hover .card-thumb i {
+            color: var(--accent);
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .category-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            font-weight: 700;
+        }
+
+        .card-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-content h3 {
+            color: white;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .card-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            border-top: 1px solid var(--glass-border);
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .read-btn {
+            color: var(--primary);
+            font-weight: 700;
+            display: flex; align-items: center; gap: 5px;
+        }
+
+        /* --- تأثيرات الاختفاء (للفلتر) --- */
+        .art-card.hide {
+            display: none;
+        }
+        
+        .art-card.show {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- الموبايل --- */
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 2.2rem; }
+            .articles-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrix-bg"></canvas>
+
+    <nav>
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-heart-pulse"></i> نبض
+        </a>
+        <a href="index.html" class="back-home">
+            <i class="fa-solid fa-house"></i> الرئيسية
+        </a>
+    </nav>
+
+    <header class="page-header">
+        <h1>مكتبة <span>الوعي</span></h1>
+        <p>مجموعة من المقالات والتجارب اللي هتساعدك تفهم نفسك، وتلاقي الطريق الصح للتعافي.</p>
+    </header>
+
+    <!-- الفلاتر -->
+    <div class="filters-container">
+        <button class="filter-btn active" data-filter="all">الكل</button>
+        <button class="filter-btn" data-filter="recovery">التعافي</button>
+        <button class="filter-btn" data-filter="awareness">الوعي</button>
+        <button class="filter-btn" data-filter="community">المجتمع</button>
+    </div>
+
+    <!-- شبكة المقالات -->
+    <div class="articles-grid">
+
+        <!-- مقال 1: BTT -->
+        <a href="article/BTT.html" class="art-card show" data-category="recovery">
+            <div class="card-thumb">
+                <span class="category-tag">التعافي</span>
+                <i class="fa-solid fa-brain"></i>
+            </div>
+            <div class="card-content">
+                <h3>ما وراء "الميول".. رحلة البحث عن الذات المفقودة</h3>
+                <p>هل الميول فطرية أم مكتسبة؟ مقال عميق بيغوص في الجذور النفسية للمثلية وبيقدم خارطة طريق للتعافي.</p>
+                <div class="card-footer">
+                    <span><i class="fa-regular fa-clock"></i> 5 دقائق</span>
+                    <span class="read-btn">اقرأ المزيد <i class="fa-solid fa-arrow-left"></i></span>
+                </div>
+            </div>
+        </a>
+
+        <!-- مقال 2: About -->
+        <a href="article/about.html" class="art-card show" data-category="community">
+            <div class="card-thumb">
+                <span class="category-tag">المجتمع</span>
+                <i class="fa-solid fa-users"></i>
+            </div>
+            <div class="card-content">
+                <h3>حكاية نبض.. ليه إحنا هنا؟</h3>
+                <p>اعرف أكتر عن فلسفتنا، قيمنا، وليه قررنا نخلق المساحة دي. مقال تعريفي لكل عضو جديد.</p>
+                <div class="card-footer">
+                    <span><i class="fa-regular fa-clock"></i> 3 دقائق</span>
+                    <span class="read-btn">اقرأ المزيد <i class="fa-solid fa-arrow-left"></i></span>
+                </div>
+            </div>
+        </a>
+
+        <!-- كارت قادم قريباً (عشان الشكل يبقى حلو) -->
+        <div class="art-card show" data-category="awareness" style="opacity: 0.7; pointer-events: none;">
+            <div class="card-thumb" style="background: #111;">
+                <span class="category-tag">قريباً</span>
+                <i class="fa-solid fa-pen-fancy"></i>
+            </div>
+            <div class="card-content">
+                <h3>خطوات عملية للتعامل مع الانتكاسة</h3>
+                <p>مقال قادم قريباً.. بنجهزلك محتوى قوي يساعدك لو وقعت في نص الطريق.</p>
+                <div class="card-footer">
+                    <span>انتظرونا..</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. نظام الفلترة
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const cards = document.querySelectorAll('.art-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // إزالة النشاط من الكل وتفعيله للزر المختار
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filterValue = btn.getAttribute('data-filter');
+
+                cards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                        card.classList.remove('hide');
+                        card.classList.add('show');
+                    } else {
+                        card.classList.add('hide');
+                        card.classList.remove('show');
+                    }
+                });
+            });
+        });
+
+        // 2. خلفية الكانفاس (نبض خفيف)
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        
+        const particles = [];
+        for(let i=0; i<50; i++) {
+            particles.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                size: Math.random() * 2,
+                speedY: Math.random() * 0.5 + 0.1
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = 'rgba(138, 43, 226, 0.3)';
+            
+            particles.forEach(p => {
+                p.y -= p.speedY;
+                if(p.y < 0) p.y = height;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+    </script>
+</body>
+</html>
