@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -8,20 +9,24 @@
     <!-- الخطوط والأيقونات -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Outfit:wght@300;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&family=Outfit:wght@300;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/?size=100&id=47294&format=png&color=000000">
 
     <style>
-        /* --- المتغيرات (نفس الهوية) --- */
+        /* --- المتغيرات والهوية البصرية --- */
         :root {
-            --bg-dark: #030305;
+            --bg-dark: #050507;
             --primary: #8a2be2;
+            --primary-dark: #5e17a3;
             --accent: #00f2ff;
             --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #ffffff;
-            --text-muted: #a0a0a0;
+            --text-muted: #b0b0b0;
             --font-ar: 'Cairo', sans-serif;
+            --font-en: 'Outfit', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
@@ -31,34 +36,35 @@
             color: var(--text-main);
             font-family: var(--font-ar);
             overflow-x: hidden;
+            min-height: 100vh;
         }
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--primary), var(--accent)); border-radius: 10px; }
 
         /* --- خلفية الكانفاس --- */
         canvas#matrix-bg {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.15;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
         }
 
         /* --- الناف بار --- */
         nav {
-            padding: 20px 5%;
+            padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(3, 3, 5, 0.9);
+            background: rgba(5, 5, 7, 0.85);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 900;
             color: var(--text-main);
             text-decoration: none;
@@ -70,48 +76,112 @@
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 600;
+            font-size: 0.9rem;
             transition: 0.3s;
             display: flex; align-items: center; gap: 8px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid transparent;
         }
-        .back-home:hover { color: var(--primary); }
+        .back-home:hover { 
+            color: var(--text-main); 
+            background: var(--glass); 
+            border-color: var(--glass-border);
+        }
 
         /* --- الهيدر --- */
         .page-header {
             text-align: center;
             padding: 80px 20px 40px;
-            background: radial-gradient(circle at top, rgba(138, 43, 226, 0.15), transparent 70%);
+            position: relative;
         }
+        .page-header::before {
+            content: '';
+            position: absolute;
+            width: 300px; height: 300px;
+            background: var(--primary);
+            filter: blur(150px);
+            opacity: 0.2;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
         .page-header h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 15px;
+            font-weight: 900;
         }
-        .page-header span { color: var(--accent); }
+        .page-header span { 
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
         .page-header p {
             color: var(--text-muted);
             font-size: 1.1rem;
             max-width: 600px;
             margin: 0 auto;
+            line-height: 1.7;
         }
 
-        /* --- الفلاتر (Filters) --- */
+        /* --- البحث والفلاتر --- */
+        .controls-container {
+            max-width: 1200px;
+            margin: 0 auto 50px;
+            padding: 0 5%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
+            font-family: var(--font-ar);
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.2);
+            background: rgba(255,255,255,0.08);
+        }
+        .search-box i {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
         .filters-container {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 50px;
+            gap: 10px;
             flex-wrap: wrap;
-            padding: 0 20px;
         }
 
         .filter-btn {
-            background: var(--glass);
+            background: transparent;
             border: 1px solid var(--glass-border);
             color: var(--text-muted);
-            padding: 10px 25px;
+            padding: 8px 20px;
             border-radius: 30px;
             cursor: pointer;
             font-family: var(--font-ar);
-            font-weight: 700;
+            font-weight: 600;
+            font-size: 0.9rem;
             transition: 0.3s;
         }
 
@@ -120,13 +190,12 @@
             color: white;
             border-color: var(--primary);
             box-shadow: 0 0 15px rgba(138, 43, 226, 0.4);
-            transform: translateY(-2px);
         }
 
         /* --- شبكة المقالات --- */
         .articles-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
             gap: 30px;
             max-width: 1200px;
             margin: 0 auto;
@@ -134,61 +203,70 @@
         }
 
         .art-card {
-            background: rgba(20, 20, 25, 0.6);
+            background: var(--glass);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
+            border-radius: 24px;
             overflow: hidden;
             text-decoration: none;
-            transition: 0.4s;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
         }
 
         .art-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        /* صورة المقال (رمزية) */
+        /* الجزء العلوي (صورة رمزية) */
         .card-thumb {
-            height: 180px;
-            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            height: 200px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             overflow: hidden;
+            border-bottom: 1px solid var(--glass-border);
         }
         
         .card-thumb i {
-            font-size: 4rem;
-            color: rgba(255, 255, 255, 0.05);
-            transition: 0.4s;
+            font-size: 5rem;
+            background: linear-gradient(to bottom, var(--text-muted), transparent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0.3;
+            transition: 0.5s;
         }
 
         .art-card:hover .card-thumb i {
-            color: var(--accent);
-            transform: scale(1.1) rotate(10deg);
+            opacity: 1;
+            transform: scale(1.1);
+            background: linear-gradient(to bottom, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .category-tag {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 5px 12px;
-            border-radius: 15px;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            padding: 6px 14px;
+            border-radius: 12px;
             font-size: 0.8rem;
             color: var(--accent);
-            border: 1px solid var(--accent);
+            border: 1px solid rgba(0, 242, 255, 0.3);
             font-weight: 700;
+            z-index: 2;
         }
 
         .card-content {
-            padding: 25px;
+            padding: 30px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
@@ -197,81 +275,103 @@
         .card-content h3 {
             color: white;
             font-size: 1.4rem;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             line-height: 1.4;
+            transition: 0.3s;
+        }
+        
+        .art-card:hover .card-content h3 {
+            color: var(--accent);
         }
 
         .card-content p {
             color: var(--text-muted);
             font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            line-height: 1.7;
+            margin-bottom: 25px;
             flex-grow: 1;
         }
 
         .card-footer {
             border-top: 1px solid var(--glass-border);
-            padding-top: 15px;
+            padding-top: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #777;
         }
 
         .read-btn {
             color: var(--primary);
             font-weight: 700;
-            display: flex; align-items: center; gap: 5px;
+            display: flex; align-items: center; gap: 8px;
+            transition: 0.3s;
+        }
+        .art-card:hover .read-btn {
+            gap: 12px;
+            color: var(--accent);
         }
 
-        /* --- تأثيرات الاختفاء (للفلتر) --- */
-        .art-card.hide {
-            display: none;
-        }
-        
-        .art-card.show {
-            animation: fadeIn 0.5s ease;
-        }
+        /* --- تأثيرات الفلترة --- */
+        .art-card.hide { display: none; }
+        .art-card.show { animation: fadeInUp 0.5s ease forwards; }
 
-        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        @keyframes fadeInUp { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
 
         /* --- الموبايل --- */
         @media (max-width: 768px) {
-            .page-header h1 { font-size: 2.2rem; }
+            .page-header h1 { font-size: 2.5rem; }
             .articles-grid { grid-template-columns: 1fr; }
+            .filters-container { gap: 8px; }
+            .filter-btn { padding: 6px 15px; font-size: 0.85rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- خلفية النبض -->
     <canvas id="matrix-bg"></canvas>
 
+    <!-- الناف بار -->
     <nav>
-        <a href="../" class="logo">
+        <a href="../index.html" class="logo">
             <i class="fa-solid fa-heart-pulse"></i> نبض
         </a>
-        <a href="../" class="back-home">
-            <i class="fa-solid fa-house"></i> الرئيسية
+        <a href="../index.html" class="back-home">
+            <i class="fa-solid fa-arrow-right"></i> الرجوع للرئيسية
         </a>
     </nav>
 
+    <!-- الهيدر -->
     <header class="page-header">
         <h1>مكتبة <span>الوعي</span></h1>
-        <p>مجموعة من المقالات والتجارب اللي هتساعدك تفهم نفسك، وتلاقي الطريق الصح للتعافي.</p>
+        <p>مجموعة من المقالات والتجارب اللي هتساعدك تفهم نفسك، تفكك الأفكار المغلوطة، وتلاقي الطريق الصح للتعافي.</p>
     </header>
 
-    <!-- الفلاتر -->
-    <div class="filters-container">
-        <button class="filter-btn active" data-filter="all">الكل</button>
-        <button class="filter-btn" data-filter="recovery">التعافي</button>
-        <button class="filter-btn" data-filter="awareness">الوعي</button>
-        <button class="filter-btn" data-filter="community">المجتمع</button>
+    <!-- أدوات التحكم -->
+    <div class="controls-container">
+        <!-- البحث -->
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="ابحث عن موضوع...">
+        </div>
+        
+        <!-- الفلاتر -->
+        <div class="filters-container">
+            <button class="filter-btn active" data-filter="all">الكل</button>
+            <button class="filter-btn" data-filter="recovery">التعافي</button>
+            <button class="filter-btn" data-filter="awareness">الوعي</button>
+            <button class="filter-btn" data-filter="community">المجتمع</button>
+        </div>
     </div>
 
     <!-- شبكة المقالات -->
-    <div class="articles-grid">
+    <div class="articles-grid" id="articlesGrid">
 
         <!-- مقال 1: BTT -->
         <a href="BTT.html" class="art-card show" data-category="recovery">
@@ -280,11 +380,11 @@
                 <i class="fa-solid fa-brain"></i>
             </div>
             <div class="card-content">
-                <h3>ما وراء "الميول".. رحلة البحث عن الذات المفقودة</h3>
-                <p>هل الميول فطرية أم مكتسبة؟ مقال عميق بيغوص في الجذور النفسية للمثلية وبيقدم خارطة طريق للتعافي.</p>
+                <h3>ما وراء "الميول".. رحلة البحث عن الذات</h3>
+                <p>هل الميول فطرية أم مكتسبة؟ مقال عميق بيغوص في الجذور النفسية للمثلية وبيقدم خارطة طريق لفهم الذات.</p>
                 <div class="card-footer">
                     <span><i class="fa-regular fa-clock"></i> 5 دقائق</span>
-                    <span class="read-btn">اقرأ المزيد <i class="fa-solid fa-arrow-left"></i></span>
+                    <span class="read-btn">اقرأ المقال <i class="fa-solid fa-arrow-left"></i></span>
                 </div>
             </div>
         </a>
@@ -293,29 +393,29 @@
         <a href="about.html" class="art-card show" data-category="community">
             <div class="card-thumb">
                 <span class="category-tag">المجتمع</span>
-                <i class="fa-solid fa-users"></i>
+                <i class="fa-solid fa-users-rays"></i>
             </div>
             <div class="card-content">
                 <h3>حكاية نبض.. ليه إحنا هنا؟</h3>
-                <p>اعرف أكتر عن فلسفتنا، قيمنا، وليه قررنا نخلق المساحة دي. مقال تعريفي لكل عضو جديد.</p>
+                <p>اعرف أكتر عن فلسفتنا، قيمنا، وليه قررنا نخلق المساحة دي وسط دوشة العالم الافتراضي.</p>
                 <div class="card-footer">
                     <span><i class="fa-regular fa-clock"></i> 3 دقائق</span>
-                    <span class="read-btn">اقرأ المزيد <i class="fa-solid fa-arrow-left"></i></span>
+                    <span class="read-btn">اقرأ المقال <i class="fa-solid fa-arrow-left"></i></span>
                 </div>
             </div>
         </a>
 
-        <!-- كارت قادم قريباً (عشان الشكل يبقى حلو) -->
-        <div class="art-card show" data-category="awareness" style="opacity: 0.7; pointer-events: none;">
-            <div class="card-thumb" style="background: #111;">
+        <!-- مقال 3: قادم قريباً -->
+        <div class="art-card show" data-category="awareness" style="opacity: 0.7; pointer-events: none; border-style: dashed;">
+            <div class="card-thumb">
                 <span class="category-tag">قريباً</span>
-                <i class="fa-solid fa-pen-fancy"></i>
+                <i class="fa-solid fa-shield-heart"></i>
             </div>
             <div class="card-content">
-                <h3>خطوات عملية للتعامل مع الانتكاسة</h3>
-                <p>مقال قادم قريباً.. بنجهزلك محتوى قوي يساعدك لو وقعت في نص الطريق.</p>
+                <h3>التعامل مع الانتكاسة بذكاء</h3>
+                <p>مقال قادم قريباً.. بنجهزلك دليل عملي وخطوات واقعية تساعدك لو وقعت في نص الطريق.</p>
                 <div class="card-footer">
-                    <span>انتظرونا..</span>
+                    <span>جاري الكتابة...</span>
                 </div>
             </div>
         </div>
@@ -323,66 +423,107 @@
     </div>
 
     <script>
-        // 1. نظام الفلترة
+        // 1. نظام الفلترة والبحث
         const filterBtns = document.querySelectorAll('.filter-btn');
         const cards = document.querySelectorAll('.art-card');
+        const searchInput = document.getElementById('searchInput');
 
+        // دالة الفلترة العامة
+        function filterArticles(category, searchTerm = '') {
+            cards.forEach(card => {
+                const cardCategory = card.getAttribute('data-category');
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                const text = card.querySelector('p').innerText.toLowerCase();
+                
+                const matchesCategory = (category === 'all' || cardCategory === category);
+                const matchesSearch = (title.includes(searchTerm) || text.includes(searchTerm));
+
+                if (matchesCategory && matchesSearch) {
+                    card.classList.remove('hide');
+                    card.classList.add('show');
+                } else {
+                    card.classList.add('hide');
+                    card.classList.remove('show');
+                }
+            });
+        }
+
+        // تفعيل أزرار الفلتر
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // إزالة النشاط من الكل وتفعيله للزر المختار
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-
+                
                 const filterValue = btn.getAttribute('data-filter');
-
-                cards.forEach(card => {
-                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
-                        card.classList.remove('hide');
-                        card.classList.add('show');
-                    } else {
-                        card.classList.add('hide');
-                        card.classList.remove('show');
-                    }
-                });
+                const searchValue = searchInput.value.toLowerCase();
+                
+                filterArticles(filterValue, searchValue);
             });
         });
 
-        // 2. خلفية الكانفاس (نبض خفيف)
+        // تفعيل البحث
+        searchInput.addEventListener('input', (e) => {
+            const searchValue = e.target.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+            
+            filterArticles(activeFilter, searchValue);
+        });
+
+
+        // 2. خلفية الشبكة (نفس الصفحة الرئيسية للاتساق)
         const canvas = document.getElementById('matrix-bg');
         const ctx = canvas.getContext('2d');
-        let width, height;
-        
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        
-        const particles = [];
-        for(let i=0; i<50; i++) {
-            particles.push({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                size: Math.random() * 2,
-                speedY: Math.random() * 0.5 + 0.1
-            });
+        let particlesArray;
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 20000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.2) - 0.1;
+                let directionY = (Math.random() * 0.2) - 0.1;
+                particlesArray.push({x, y, directionX, directionY, size});
+            }
         }
 
         function animate() {
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = 'rgba(138, 43, 226, 0.3)';
-            
-            particles.forEach(p => {
-                p.y -= p.speedY;
-                if(p.y < 0) p.y = height;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                ctx.fill();
-            });
             requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                let p = particlesArray[i];
+                if (p.x > canvas.width || p.x < 0) p.directionX = -p.directionX;
+                if (p.y > canvas.height || p.y < 0) p.directionY = -p.directionY;
+                p.x += p.directionX;
+                p.y += p.directionY;
+                
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = '#8a2be2';
+                ctx.fill();
+
+                // رسم الخطوط
+                for (let j = i; j < particlesArray.length; j++) {
+                    let p2 = particlesArray[j];
+                    let distance = ((p.x - p2.x) * (p.x - p2.x)) + ((p.y - p2.y) * (p.y - p2.y));
+                    if (distance < (canvas.width/9) * (canvas.height/9)) {
+                        ctx.strokeStyle = `rgba(138, 43, 226, ${1 - distance/20000})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
         }
 
-        window.addEventListener('resize', resize);
-        resize();
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
         animate();
     </script>
 </body>
