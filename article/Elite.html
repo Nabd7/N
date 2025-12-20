@@ -1,0 +1,435 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>من نحن | Nabd Elite 💎</title>
+    
+    <!-- الخطوط والأيقونات -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&family=Outfit:wght@300;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/?size=100&id=47294&format=png&color=000000">
+    
+    <style>
+        /* --- المتغيرات والهوية --- */
+        :root {
+            --bg-dark: #050507;
+            --primary: #8a2be2;
+            --primary-dark: #5e17a3;
+            --accent: #00f2ff;
+            --gold: #ffd700; /* لون المؤسس */
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: #b0b0b0;
+            --font-ar: 'Cairo', sans-serif;
+            --font-en: 'Outfit', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: var(--font-ar);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--primary), var(--accent)); border-radius: 10px; }
+
+        /* --- الخلفية --- */
+        canvas#matrix-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+        }
+
+        /* --- الناف بار --- */
+        nav {
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 5, 7, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.4rem; font-weight: 900; color: var(--text-main); text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .logo i { color: var(--primary); animation: beat 2s infinite; }
+
+        .back-btn {
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .back-btn:hover { background: var(--glass-hover); border-color: var(--accent); }
+
+        /* --- الهيدر والقيم --- */
+        .story-section {
+            text-align: center;
+            padding: 80px 20px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .story-section h1 {
+            font-size: 3rem; margin-bottom: 20px; font-weight: 900;
+        }
+        .story-section h1 span {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .story-section p {
+            color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px;
+        }
+
+        /* --- قسم النخبة --- */
+        .elite-title {
+            text-align: center; margin-top: 50px; margin-bottom: 50px;
+        }
+        .elite-title h2 {
+            font-size: 2.5rem; display: inline-block; position: relative;
+            font-family: var(--font-en);
+        }
+        .elite-title h2::after {
+            content: ''; position: absolute; width: 60%; height: 3px;
+            background: var(--accent); bottom: -10px; left: 20%;
+            border-radius: 10px; box-shadow: 0 0 10px var(--accent);
+        }
+
+        .elite-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 0 5% 100px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* --- كارت العضو --- */
+        .member-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 35px 25px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.1s, box-shadow 0.3s;
+            transform-style: preserve-3d;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        /* تأثير الخلفية عند الهوفر */
+        .member-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, rgba(138,43,226,0.15), transparent 70%);
+            opacity: 0; transition: 0.4s;
+            z-index: -1;
+        }
+        .member-card:hover::before { opacity: 1; }
+        .member-card:hover {
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-color: rgba(138, 43, 226, 0.4);
+        }
+
+        /* الأيقونة */
+        .avatar-box {
+            width: 90px; height: 90px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem;
+            color: var(--primary);
+            border: 1px solid var(--glass-border);
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            transform: translateZ(20px);
+            transition: 0.3s;
+        }
+        .member-card:hover .avatar-box {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.4);
+            color: white;
+            background: var(--primary);
+        }
+
+        .role-badge {
+            font-family: var(--font-en);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            margin-bottom: 15px;
+            transform: translateZ(10px);
+        }
+
+        .member-name {
+            font-size: 1.6rem; font-weight: 800; color: white; margin-bottom: 5px;
+            font-family: var(--font-en); transform: translateZ(15px);
+        }
+        
+        .member-meta {
+            font-size: 0.85rem; color: #888; margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .member-bio {
+            font-size: 0.95rem; color: #ccc; line-height: 1.6;
+            font-style: italic; transform: translateZ(10px);
+        }
+
+        /* --- ستايل خاص للمؤسس (MoZ) --- */
+        .member-card.founder {
+            border-color: rgba(255, 215, 0, 0.3);
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.05), rgba(0,0,0,0));
+        }
+        .member-card.founder .avatar-box {
+            color: var(--gold); border-color: rgba(255, 215, 0, 0.4);
+        }
+        .member-card.founder:hover .avatar-box {
+            background: var(--gold); color: black; box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+        }
+        .member-card.founder .role-badge {
+            background: rgba(255, 215, 0, 0.1); color: var(--gold); border-color: var(--gold);
+        }
+        .member-card.founder:hover {
+            box-shadow: 0 20px 60px rgba(255, 215, 0, 0.15);
+            border-color: var(--gold);
+        }
+
+        /* --- الأنيميشن --- */
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- الموبايل --- */
+        @media (max-width: 768px) {
+            .story-section h1 { font-size: 2.2rem; }
+            .elite-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الخلفية -->
+    <canvas id="matrix-bg"></canvas>
+
+    <!-- الناف -->
+    <nav>
+        <a href="../index.html" class="logo">
+            <i class="fa-solid fa-heart-pulse"></i> Nabd
+        </a>
+        <a href="index.html" class="back-btn">
+            <i class="fa-solid fa-arrow-right"></i> الرجوع للمكتبة
+        </a>
+    </nav>
+
+    <!-- قصة المجتمع -->
+    <section class="story-section reveal">
+        <h1>ليه <span>نبض</span> موجود؟</h1>
+        <p>
+            وسط عالم افتراضي مليان دوشة، وتطبيقات بتستهدف استهلاكك، قررنا نخلق مساحة مختلفة. 
+            "نبض" مش مجرد شات.. هو محاولة لخلق بيئة مجتمعية نظيفة، بتجمع ناس شبه بعض في التفكير والقيم.
+            هدفنا الأساسي هو **الونس النظيف**، والتعافي من خلال المشاركة والدعم الحقيقي، بعيداً عن الأحكام.
+        </p>
+    </section>
+
+    <!-- قسم النخبة -->
+    <div class="elite-title reveal">
+        <h2>Nabd Elite 💎</h2>
+    </div>
+
+    <div class="elite-grid">
+        
+        <!-- المؤسس: MoZ -->
+        <div class="member-card founder reveal">
+            <div class="avatar-box">
+                <i class="fa-solid fa-crown"></i>
+            </div>
+            <span class="role-badge">Founder & Leader</span>
+            <h3 class="member-name">MoZ</h3>
+            <span class="member-meta">The Visionary</span>
+            <p class="member-bio">"صاحب الفكرة ومؤسس الكيان. الشخص اللي شاف إننا محتاجين مكان آمن وقرر يبنيه طوبة طوبة. بيسعى دايماً للتطوير والحفاظ على هوية المكان."</p>
+        </div>
+
+        <!-- Zain -->
+        <div class="member-card reveal">
+            <div class="avatar-box">
+                <i class="fa-solid fa-brain"></i>
+            </div>
+            <span class="role-badge">The Wise Mind</span>
+            <h3 class="member-name">Zain</h3>
+            <span class="member-meta">22 Years • Pharmacist</span>
+            <p class="member-bio">"المرجع العقلاني للمجموعة. كلامه موزون، قصف جبهات بشياكة، ونصايحه دايماً في الصميم. وجوده بيعمل توازن نفسي مطلوب."</p>
+        </div>
+
+        <!-- Modserr -->
+        <div class="member-card reveal">
+            <div class="avatar-box">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+            <span class="role-badge">Community Dynamo</span>
+            <h3 class="member-name">Modserr</h3>
+            <span class="member-meta">17 Years • The Spirit</span>
+            <p class="member-bio">"شعلة النشاط وأصغر دينامو في المكان. قلبه أبيض وبيخاف على الجروب كأنه بيته، ومستعد يدافع عنه باستماتة."</p>
+        </div>
+
+        <!-- Ahmed -->
+        <div class="member-card reveal">
+            <div class="avatar-box">
+                <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <span class="role-badge">Loyal Brother</span>
+            <h3 class="member-name">Ahmed</h3>
+            <span class="member-meta">Pure Heart</span>
+            <p class="member-bio">"رمز للجدعنة والأخوة. موجود عشان يثبت إن لسه في صحاب بجد. قلبه مفتوح للكل ومصدر أمان للجديد قبل القديم."</p>
+        </div>
+
+        <!-- Memo -->
+        <div class="member-card reveal">
+            <div class="avatar-box">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+            </div>
+            <span class="role-badge">The Peacemaker</span>
+            <h3 class="member-name">Memo</h3>
+            <span class="member-meta">Support Lead</span>
+            <p class="member-bio">"حمامة السلام. بيعرف يسمع، يحتوي، ويهدي النفوس وقت الأزمات. حلقة الوصل اللي بتربط الناس ببعض."</p>
+        </div>
+
+        <!-- Loai -->
+        <div class="member-card reveal">
+            <div class="avatar-box">
+                <i class="fa-regular fa-sun"></i>
+            </div>
+            <span class="role-badge">Vibe Specialist</span>
+            <h3 class="member-name">Loai</h3>
+            <span class="member-meta">Positive Energy</span>
+            <p class="member-bio">"صاحب الصباحات الرايقة والطاقة الإيجابية. وجوده بيضمن إن المود العام يفضل لطيف، مريح، وبعيد عن النكد."</p>
+        </div>
+
+        <!-- Zika -->
+        <div class="member-card reveal">
+            <div class="avatar-box">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <span class="role-badge">Elite Guardian</span>
+            <h3 class="member-name">𝒁𝒊𝒌𝒂</h3>
+            <span class="member-meta">25 Years • Ras Elbar</span>
+            <p class="member-bio">"إضافة قوية لصف النخبة. هدوء ورزانة بتدي ثقل للمكان، وشخصية قيادية بالفطرة."</p>
+        </div>
+
+        <!-- Desha -->
+        <div class="member-card reveal">
+            <div class="avatar-box">
+                <i class="fa-solid fa-dragon"></i>
+            </div>
+            <span class="role-badge">Elite Guardian</span>
+            <h3 class="member-name">Desha</h3>
+            <span class="member-meta">25 Years • Gharbia</span>
+            <p class="member-bio">"عمود ارتكاز جديد. وعي وثقافة عالية، وقلب بيساع الكل. وجوده بيضيف عمق للمناقشات."</p>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. خلفية الجسيمات (Standard Nabd Background)
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 18000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.2) - 0.1;
+                let directionY = (Math.random() * 0.2) - 0.1;
+                particlesArray.push({x, y, directionX, directionY, size});
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                let p = particlesArray[i];
+                p.x += p.directionX;
+                p.y += p.directionY;
+                if (p.x > canvas.width || p.x < 0) p.directionX = -p.directionX;
+                if (p.y > canvas.height || p.y < 0) p.directionY = -p.directionY;
+                
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = '#8a2be2';
+                ctx.fill();
+            }
+        }
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        animate();
+
+        // 2. 3D Tilt Effect
+        const cards = document.querySelectorAll('.member-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -7; 
+                const rotateY = ((x - centerX) / centerX) * 7;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
+            });
+        });
+
+        // 3. Scroll Reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
