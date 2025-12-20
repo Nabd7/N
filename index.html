@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -9,21 +10,23 @@
     <!-- الخطوط والأيقونات -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Outfit:wght@300;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&family=Outfit:wght@300;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/png" href="https://img.icons8.com/?size=100&id=47294&format=png&color=000000">
+    
     <style>
-        /* --- المتغيرات ونظام الألوان (Dark GenZ Aesthetic) --- */
+        /* --- المتغيرات ونظام الألوان --- */
         :root {
-            --bg-dark: #030305;
-            --primary: #8a2be2;      /* بنفسجي نبض */
-            --primary-glow: #a64dff;
-            --accent: #00f2ff;       /* سيان نيون */
-            --danger: #ff0055;       /* أحمر للقوانين */
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --bg-dark: #050507;
+            --primary: #8a2be2;
+            --primary-dark: #5e17a3;
+            --accent: #00f2ff;
+            --danger: #ff0055;
+            --glass: rgba(255, 255, 255, 0.04);
+            --glass-hover: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #ffffff;
-            --text-muted: #a0a0a0;
+            --text-muted: #b0b0b0;
             --font-ar: 'Cairo', sans-serif;
             --font-en: 'Outfit', sans-serif;
         }
@@ -34,6 +37,7 @@
             padding: 0;
             box-sizing: border-box;
             outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -42,13 +46,14 @@
             font-family: var(--font-ar);
             overflow-x: hidden;
             scroll-behavior: smooth;
+            line-height: 1.6;
         }
 
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--primary), var(--accent)); border-radius: 10px; }
 
-        /* --- شاشة التحميل (Preloader) --- */
+        /* --- شاشة التحميل --- */
         .preloader {
             position: fixed;
             top: 0;
@@ -61,23 +66,27 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s ease, visibility 0.5s;
         }
         .heartbeat-loader {
             font-size: 4rem;
-            color: var(--primary);
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             animation: heartBeat 1.2s infinite ease-in-out;
+            filter: drop-shadow(0 0 15px rgba(138, 43, 226, 0.5));
         }
         .loader-text {
             margin-top: 20px;
             font-family: var(--font-en);
-            letter-spacing: 2px;
-            font-size: 1.2rem;
-            color: var(--accent);
+            letter-spacing: 4px;
+            font-size: 1rem;
+            color: var(--text-muted);
             text-transform: uppercase;
+            animation: blink 2s infinite;
         }
 
-        /* --- خلفية الكانفاس --- */
+        /* --- الخلفية التفاعلية --- */
         canvas#matrix-bg {
             position: fixed;
             top: 0;
@@ -85,7 +94,6 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            opacity: 0.15;
         }
 
         /* --- الناف بار --- */
@@ -93,66 +101,97 @@
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 20px 5%;
+            padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            background: rgba(3, 3, 5, 0.7);
-            backdrop-filter: blur(15px);
+            background: rgba(5, 5, 7, 0.85);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
             transition: 0.3s;
         }
+        header.scrolled {
+            padding: 10px 5%;
+            background: rgba(5, 5, 7, 0.95);
+        }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 900;
             color: var(--text-main);
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         .logo i {
             color: var(--primary);
-            animation: heartBeat 2s infinite;
+            animation: heartBeat 3s infinite;
         }
         .logo span {
             font-family: var(--font-en);
             font-weight: 300;
             color: var(--accent);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            position: relative;
+            top: 2px;
         }
 
         .nav-menu {
             display: flex;
-            gap: 30px;
+            gap: 35px;
+            align-items: center;
         }
         .nav-menu a {
             color: var(--text-muted);
             text-decoration: none;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: 0.3s;
             position: relative;
         }
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            right: 0;
+            background: var(--accent);
+            transition: 0.3s;
+        }
         .nav-menu a:hover { color: var(--text-main); }
+        .nav-menu a:hover::after { width: 100%; }
 
         .join-btn {
-            padding: 8px 20px;
-            border-radius: 30px;
-            background: linear-gradient(45deg, var(--primary), #5e17a3);
+            padding: 10px 25px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             text-decoration: none;
             font-weight: 700;
-            box-shadow: 0 0 15px rgba(138, 43, 226, 0.3);
-            transition: 0.3s;
-            border: 1px solid transparent;
+            font-size: 0.95rem;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.25);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .join-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 0 25px rgba(138, 43, 226, 0.6);
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
             border-color: var(--accent);
+        }
+
+        /* --- زر القائمة للموبايل --- */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-main);
+            z-index: 1002;
         }
 
         /* --- الهيرو سكشن --- */
@@ -162,243 +201,305 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 100px 20px;
+            padding: 120px 20px 50px;
             position: relative;
             overflow: hidden;
         }
         
-        .hero::before {
-            content: '';
+        .hero-glow {
             position: absolute;
-            width: 300px;
-            height: 300px;
-            background: var(--primary);
-            filter: blur(150px);
-            opacity: 0.3;
-            border-radius: 50%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(138,43,226,0.15) 0%, rgba(0,0,0,0) 70%);
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            pointer-events: none;
             z-index: -1;
         }
 
-        .hero-content { max-width: 800px; z-index: 2; }
+        .hero-content { max-width: 900px; z-index: 2; position: relative; }
         
         .status-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            background: rgba(0, 242, 255, 0.1);
-            border: 1px solid var(--accent);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(0, 242, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.3);
             color: var(--accent);
-            border-radius: 20px;
-            font-size: 0.9rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             font-family: var(--font-en);
             letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+        }
+        .status-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
         }
 
         .hero h1 {
-            font-size: 4.5rem;
-            line-height: 1.1;
-            margin-bottom: 20px;
+            font-size: 4rem;
+            line-height: 1.2;
+            margin-bottom: 25px;
             font-weight: 900;
-        }
-        .hero h1 span {
-            display: block;
-            background: linear-gradient(to right, #fff, var(--text-muted));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #fff;
         }
         .hero h1 .highlight {
-            color: var(--primary);
-            -webkit-text-fill-color: var(--primary);
-            text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+            color: transparent;
+            background: linear-gradient(90deg, var(--primary), #d946ef);
+            -webkit-background-clip: text;
+            display: inline-block;
         }
 
         .hero p {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             color: var(--text-muted);
-            margin-bottom: 40px;
+            margin-bottom: 45px;
             line-height: 1.8;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* --- قسم المقالات (جديد) --- */
-        .blog-section {
-            padding: 80px 5%;
+        .cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
-        .blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-        .blog-card {
-            display: block;
+        .secondary-btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-main);
             text-decoration: none;
+            font-weight: 600;
+            border: 1px solid var(--glass-border);
+            transition: 0.3s;
+        }
+        .secondary-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--text-main);
+        }
+
+        /* --- البطاقات وتأثير Tilt --- */
+        .section-padding { padding: 100px 5%; }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+        .section-title h2 { font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; }
+        .section-title span {
+            color: var(--accent);
+            font-family: var(--font-en);
+            font-weight: 700;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .tilt-card {
             background: var(--glass);
             border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            overflow: hidden;
-            transition: 0.4s;
+            border-radius: 24px;
+            padding: 35px;
             position: relative;
-        }
-        .blog-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(0, 242, 255, 0.1);
-        }
-        .blog-content { padding: 30px; }
-        .blog-tag {
-            color: var(--primary);
-            font-size: 0.9rem;
-            font-weight: 700;
-            margin-bottom: 10px;
+            overflow: hidden;
+            transition: transform 0.1s, box-shadow 0.3s;
+            transform-style: preserve-3d;
+            text-decoration: none;
             display: block;
         }
-        .blog-card h3 {
-            color: white;
+        
+        /* تأثير التوهج عند الهوفر */
+        .tilt-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 24px;
+            padding: 2px;
+            background: linear-gradient(45deg, transparent, rgba(138,43,226,0.3), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .tilt-card:hover {
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            background: var(--glass-hover);
+        }
+        .tilt-card:hover::before { opacity: 1; }
+
+        .tilt-content { transform: translateZ(20px); }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.5rem;
-            margin-bottom: 15px;
+            color: var(--primary);
+            margin-bottom: 25px;
+            border: 1px solid rgba(138, 43, 226, 0.2);
         }
-        .blog-card p {
-            color: var(--text-muted);
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-        .read-more {
+        .tilt-card h3 { color: white; font-size: 1.4rem; margin-bottom: 12px; }
+        .tilt-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
+        .read-more-link {
             margin-top: 20px;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             color: var(--accent);
             font-weight: 700;
-        }
-
-        /* --- العناوين المشتركة --- */
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        .section-title h2 { font-size: 2.5rem; margin-bottom: 10px; }
-        .section-title span {
-            color: var(--primary);
-            font-family: var(--font-en);
-            text-transform: uppercase;
-            letter-spacing: 2px;
             font-size: 0.9rem;
-        }
-
-        /* --- قسم المميزات --- */
-        .features { padding: 80px 5%; }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        .card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            padding: 30px;
-            border-radius: 20px;
-            transition: 0.4s;
-        }
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            background: rgba(138, 43, 226, 0.05);
-        }
-        .card i {
-            font-size: 2.5rem;
-            color: var(--accent);
-            margin-bottom: 20px;
-            background: rgba(0, 242, 255, 0.1);
-            padding: 15px;
-            border-radius: 15px;
-        }
-        .card h3 { font-size: 1.5rem; margin-bottom: 10px; }
-        .card p { color: var(--text-muted); font-size: 0.95rem; }
-
-        /* --- قسم القوانين --- */
-        .rules-section {
-            padding: 80px 5%;
-            background: linear-gradient(180deg, var(--bg-dark), rgba(255, 0, 85, 0.05), var(--bg-dark));
-        }
-        .rules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .rule-card {
-            background: rgba(20, 0, 5, 0.6);
-            border-right: 3px solid var(--danger);
-            padding: 20px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
             transition: 0.3s;
         }
-        .rule-card:hover {
-            background: rgba(255, 0, 85, 0.1);
-            transform: translateX(-5px);
-        }
-        .rule-card i { color: var(--danger); font-size: 1.2rem; }
-        .rule-card h4 { font-size: 1.1rem; color: #ffccd5; }
+        .tilt-card:hover .read-more-link { gap: 12px; }
 
-        /* --- قسم النواة (Elite) --- */
-        .elite-hint {
-            text-align: center;
-            padding: 60px 20px;
-            margin: 50px 5%;
-            background: radial-gradient(circle, rgba(138, 43, 226, 0.1) 0%, transparent 70%);
-            border: 1px dashed var(--glass-border);
-            border-radius: 20px;
+        /* --- قسم القوانين --- */
+        .rules-container {
+            background: linear-gradient(180deg, rgba(255,0,85,0.02), transparent);
+            border-radius: 30px;
+            border: 1px dashed rgba(255, 0, 85, 0.2);
+            padding: 40px;
         }
-        .elite-hint i { color: var(--primary); font-size: 2rem; margin-bottom: 15px; }
-        .elite-hint p { font-size: 1.1rem; color: var(--text-muted); }
+        .rule-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-right: 4px solid var(--danger);
+            transition: 0.3s;
+        }
+        .rule-item:hover { transform: translateX(-10px); background: rgba(255,0,85,0.05); }
+        .rule-icon { color: var(--danger); font-size: 1.2rem; }
+        .rule-text { font-weight: 600; color: #ffebef; }
 
         /* --- الفوتر --- */
         footer {
-            background: #000;
-            padding: 50px 5% 20px;
+            background: #020203;
+            padding: 60px 5% 30px;
             border-top: 1px solid var(--glass-border);
             text-align: center;
+            position: relative;
         }
         .footer-logo {
             font-family: var(--font-en);
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             display: inline-block;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            background: linear-gradient(90deg, #fff, var(--text-muted));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .copyright { margin-top: 30px; font-size: 0.8rem; color: #555; }
+        .social-links { margin: 30px 0; display: flex; justify-content: center; gap: 20px; }
+        .social-btn {
+            width: 45px; height: 45px;
+            border-radius: 50%;
+            background: var(--glass);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        .social-btn:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        /* --- القائمة الجانبية للموبايل --- */
+        .mobile-nav-overlay {
+            position: fixed;
+            top: 0; right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100%;
+            background: rgba(10, 10, 15, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 1001;
+            transition: 0.4s ease-in-out;
+            border-left: 1px solid var(--glass-border);
+            padding: 80px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        }
+        .mobile-nav-overlay.active { right: 0; }
+        .mobile-nav-overlay a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 15px;
+        }
+        .close-menu {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            font-size: 1.5rem;
+            color: var(--danger);
+            cursor: pointer;
+        }
+        .overlay-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s;
+        }
+        .overlay-bg.active { opacity: 1; visibility: visible; }
+
+        /* --- الموبايل (Responsive) --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-menu, .join-btn { display: none; }
+            .hamburger { display: block; }
+            .cta-group { flex-direction: column; width: 100%; }
+            .join-btn.mobile-only { display: flex; justify-content: center; margin-top: 10px; width: 100%; }
+            .hero { padding-top: 150px; }
+        }
 
         /* --- الأنيميشن --- */
         @keyframes heartBeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.1); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.1); }
-            70% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
         }
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
+        @keyframes blink { 50% { opacity: 0.5; } }
+        
+        .reveal { opacity: 0; transform: translateY(40px); transition: 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.active { opacity: 1; transform: translateY(0); }
-
-        /* --- الموبايل --- */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.8rem; }
-            .nav-menu { display: none; }
-            .join-btn { display: none; }
-            .logo { flex-grow: 1; justify-content: center; }
-        }
     </style>
 </head>
 <body>
@@ -406,14 +507,27 @@
     <!-- شاشة التحميل -->
     <div class="preloader" id="preloader">
         <i class="fa-solid fa-heart-pulse heartbeat-loader"></i>
-        <div class="loader-text">Nabd Loading...</div>
+        <div class="loader-text">Initializing Nabd...</div>
+    </div>
+
+    <!-- قائمة الموبايل -->
+    <div class="overlay-bg" id="overlay"></div>
+    <div class="mobile-nav-overlay" id="mobileMenu">
+        <i class="fa-solid fa-xmark close-menu" onclick="toggleMenu()"></i>
+        <a href="article/about.html" onclick="toggleMenu()">من نحن</a>
+        <a href="https://nabd7.github.io/N/article" onclick="toggleMenu()">المقالات</a>
+        <a href="#features" onclick="toggleMenu()">مميزاتنا</a>
+        <a href="#rules" onclick="toggleMenu()">القوانين</a>
+        <a href="https://t.me/Nabd4U" target="_blank" class="join-btn mobile-only">
+            انضم للمجتمع <i class="fa-brands fa-telegram"></i>
+        </a>
     </div>
 
     <!-- خلفية تفاعلية -->
     <canvas id="matrix-bg"></canvas>
 
     <!-- الهيدر -->
-    <header>
+    <header id="header">
         <a href="#" class="logo">
             <i class="fa-solid fa-heart-pulse"></i>
             نبض <span>Nabd</span>
@@ -423,181 +537,293 @@
             <a href="https://nabd7.github.io/N/article">المقالات</a>
             <a href="#rules">القوانين</a>
         </nav>
-        <a href="https://t.me/Nabd4U" target="_blank" class="join-btn">
-            <i class="fa-brands fa-telegram"></i> انضم للمجتمع
-        </a>
+        <div class="actions" style="display: flex; gap: 15px; align-items: center;">
+            <a href="https://t.me/Nabd4U" target="_blank" class="join-btn desktop-only">
+                <i class="fa-brands fa-telegram"></i> مجتمع التليجرام
+            </a>
+            <div class="hamburger" onclick="toggleMenu()">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </div>
+        </div>
     </header>
 
     <!-- الهيرو -->
     <section class="hero">
+        <div class="hero-glow"></div>
         <div class="hero-content">
-            <div class="status-badge reveal">GEN-Z COMMUNITY 💎</div>
+            <div class="status-badge reveal">
+                <span>SAFE ZONE 2025</span>
+            </div>
             <h1 class="reveal">
-                مش مجرد جروب شات
-                <span class="highlight">ده مجتمع تعافي وونس</span>
+                مش مجرد جروب شات<br>
+                <span class="highlight">مجتمع للتعافي والونس</span>
             </h1>
             <p class="reveal">
-                مساحة آمنة (Safe Zone) بعيداً عن دوشة العالم وأحكامه. هنا بنسمعك، بنفهمك، وبنساعد بعض نلاقي الطريق الصح ونثبت عليه.
-                لا شقط، لا تجاوز، فقط دعم حقيقي.
+                مساحة آمنة تماماً، بعيداً عن ضجيج العالم وأحكامه. هنا بنسمعك بجد، بنفهم صراعاتك، وبنساعد بعض نلاقي الطريق ونثبت عليه.
+                لا شقط، لا تجاوز، فقط دعم نفسي حقيقي.
             </p>
-            <div class="reveal">
-                <a href="#content" class="join-btn" style="padding:15px 40px; font-size:1.1rem;">
-                    ابدأ التصفح <i class="fa-solid fa-arrow-down"></i>
+            <div class="cta-group reveal">
+                <a href="#content" class="join-btn" style="padding: 15px 40px; font-size: 1.1rem;">
+                    استكشف المحتوى <i class="fa-solid fa-arrow-down"></i>
                 </a>
+                <a href="article/about.html" class="secondary-btn">اعرف قصتنا</a>
             </div>
         </div>
     </section>
 
-    <!-- قسم المقالات والمحتوى (الجديد) -->
-    <section class="blog-section" id="content">
+    <!-- قسم المقالات -->
+    <section class="section-padding" id="content">
         <div class="section-title reveal">
-            <span>Knowledge Hub</span>
+            <span>Knowledge Base</span>
             <h2>ابدأ رحلة الوعي</h2>
         </div>
-        <div class="blog-grid">
-            <!-- كارت صفحة من نحن -->
-            <a href="article/about.html" class="blog-card reveal">
-                <div class="blog-content">
-                    <span class="blog-tag"><i class="fa-solid fa-users"></i> عن المجتمع</span>
-                    <h3>ليه "نبض"؟</h3>
-                    <p>اعرف حكايتنا، فلسفتنا في الدعم، وازاي بنحاول نخلق مساحة أمان وونس نظيف وسط الدوشة.</p>
-                    <div class="read-more">اكتشفنا <i class="fa-solid fa-arrow-left"></i></div>
+        <div class="grid-layout">
+            <!-- كارت 1 -->
+            <a href="article/about.html" class="tilt-card reveal">
+                <div class="tilt-content">
+                    <div class="card-icon"><i class="fa-solid fa-users-rays"></i></div>
+                    <h3>لماذا "نبض"؟</h3>
+                    <p>اعرف حكايتنا، فلسفتنا في الدعم النفسي، وكيف نحاول خلق بيئة نظيفة وآمنة للجميع.</p>
+                    <span class="read-more-link">أكمل القراءة <i class="fa-solid fa-arrow-left"></i></span>
                 </div>
             </a>
-            <!-- كارت المقال الأول -->
-            <a href="article/BTT.html" class="blog-card reveal">
-                <div class="blog-content">
-                    <span class="blog-tag"><i class="fa-solid fa-brain"></i> التعافي</span>
-                    <h3>ما وراء "الميول"؟</h3>
-                    <p>رحلة لاستكشاف الذات المفقودة، وفهم الجذور الحقيقية للميول المثلية بعيداً عن وهم "أنا اتخلقت كده".</p>
-                    <div class="read-more">اقرأ المقال <i class="fa-solid fa-arrow-left"></i></div>
+            <!-- كارت 2 -->
+            <a href="article/BTT.html" class="tilt-card reveal">
+                <div class="tilt-content">
+                    <div class="card-icon"><i class="fa-solid fa-brain"></i></div>
+                    <h3>ما وراء "الميول"</h3>
+                    <p>رحلة عميقة لاستكشاف الجذور النفسية، وفك شفرة وهم "أنا اتخلقت كده" بأسلوب علمي مبسط.</p>
+                    <span class="read-more-link">اقرأ المقال <i class="fa-solid fa-arrow-left"></i></span>
+                </div>
+            </a>
+            <!-- كارت 3 -->
+            <a href="#" class="tilt-card reveal">
+                <div class="tilt-content">
+                    <div class="card-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                    <h3>الوقاية والتعافي</h3>
+                    <p>خطوات عملية وأدوات تساعدك على إدارة المشاعر وبناء عادات صحية جديدة.</p>
+                    <span class="read-more-link">قريباً <i class="fa-solid fa-lock"></i></span>
                 </div>
             </a>
         </div>
     </section>
 
     <!-- قسم المميزات -->
-    <section class="features">
+    <section class="section-padding" id="features" style="background: rgba(255,255,255,0.01);">
         <div class="section-title reveal">
-            <span>Core Values</span>
-            <h2>إيه اللي بيميزنا؟</h2>
+            <span>Our Vibe</span>
+            <h2>مجتمع شبهك</h2>
         </div>
-        <div class="grid-container">
-            <div class="card reveal">
-                <i class="fa-solid fa-users"></i>
-                <h3>مجتمع "رايق"</h3>
-                <p>الجو هنا Chill Zone. هزار، مناقشات، ألعاب، ومذاكرة. بنملى وقت الفراغ بحاجة مفيدة.</p>
+        <div class="grid-layout">
+            <div class="tilt-card reveal">
+                <div class="tilt-content">
+                    <div class="card-icon" style="color: var(--accent);"><i class="fa-solid fa-gamepad"></i></div>
+                    <h3>Chill & Fun</h3>
+                    <p>مش بس كلام جد.. في ألعاب، مناقشات، أفلام، ومذاكرة. بنملى وقتنا بحاجة تفيد وتبسط.</p>
+                </div>
             </div>
-            <div class="card reveal active">
-                <i class="fa-solid fa-face-smile-beam"></i>
-                <h3>خُد راحتك</h3>
-                <p>باسمك الحقيقي أو بلقب مستعار.. مش فارقة معانا. المهم إنك تكون مرتاح وتتكلم بطبيعتك من غير أي ضغط أو تصنيف.</p>
+            <div class="tilt-card reveal">
+                <div class="tilt-content">
+                    <div class="card-icon" style="color: var(--accent);"><i class="fa-solid fa-user-secret"></i></div>
+                    <h3>خصوصية تامة</h3>
+                    <p>باسمك الحقيقي أو بلقب مستعار، المهم تكون مرتاح. بياناتك وخصوصيتك خط أحمر.</p>
+                </div>
             </div>
-            <div class="card reveal">
-                <i class="fa-solid fa-hand-holding-heart"></i>
-                <h3>دعم حقيقي</h3>
-                <p>إحنا عيلة بتسند بعض. بنشارك تجاربنا، وبنقاوم العادات الغلط سوا بوعي.</p>
+            <div class="tilt-card reveal">
+                <div class="tilt-content">
+                    <div class="card-icon" style="color: var(--accent);"><i class="fa-solid fa-hand-holding-hand"></i></div>
+                    <h3>دعم الأقران</h3>
+                    <p>كلنا مرينا بنفس التجربة، عشان كده بنفهم بعض من غير أحكام وبنشجع بعض نكمل.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- قسم القوانين -->
-    <section class="rules-section" id="rules">
+    <section class="section-padding" id="rules">
         <div class="section-title reveal">
-            <span style="color: var(--danger);">The Red Lines</span>
-            <h2>قواعدنا صارمة لحمايتك</h2>
+            <span style="color: var(--danger);">Non-Negotiable</span>
+            <h2>خطوط حمراء لحمايتك</h2>
         </div>
-        <div class="rules-grid">
-            <div class="rule-card reveal">
-                <i class="fa-solid fa-ban"></i>
-                <h4>ممنوع المحتوى الجنسي تماماً</h4>
+        <div class="rules-container reveal">
+            <div class="rules-grid">
+                <div class="rule-item">
+                    <i class="fa-solid fa-ban rule-icon"></i>
+                    <span class="rule-text">ممنوع أي محتوى جنسي أو إباحي نهائياً.</span>
+                </div>
+                <div class="rule-item">
+                    <i class="fa-solid fa-user-slash rule-icon"></i>
+                    <span class="rule-text">ممنوع طلبات الخاص والتعارف الجانبي (Block فوري).</span>
+                </div>
+                <div class="rule-item">
+                    <i class="fa-solid fa-comments-off rule-icon"></i>
+                    <span class="rule-text">يمنع التنمر، السخرية، أو التقليل من معاناة أي عضو.</span>
+                </div>
             </div>
-            <div class="rule-card reveal">
-                <i class="fa-solid fa-user-lock"></i>
-                <h4>ممنوع طلبات الخاص والتعارف</h4>
-            </div>
-            <div class="rule-card reveal">
-                <i class="fa-solid fa-hand-fist"></i>
-                <h4>ممنوع التنمر أو الإهانة</h4>
-            </div>
-            <div class="rule-card reveal">
-                <i class="fa-solid fa-shield-halved"></i>
-                <h4>احترام خصوصية الأعضاء خط أحمر</h4>
-            </div>
+                <!--<div style="text-align: center; margin-top: 30px; color: var(--text-muted);">
+                <small>يُدار المجتمع بواسطة فريق "النواة" (Nabd Elite) لضمان الأمان.</small>
+            </div>  -->
+
         </div>
     </section>
 
-    <!-- إشارة للنواة الصلبة -->
-    <div class="elite-hint reveal">
-        <i class="fa-regular fa-gem"></i>
-        <h3>Managed by Nabd Elite 💎</h3>
-        <p>يُدار هذا المجتمع بواسطة فريق "النواة" لضمان بيئة آمنة ومستقرة للجميع.</p>
-    </div>
-
     <!-- الفوتر -->
     <footer>
-        <div class="footer-logo">Nabd | نبض</div>
-        <p style="color: #888;">هذا المجتمع مخصص للدعم النفسي، الوعي، والتعافي من الميول المثلية</p>
-        <div class="copyright">
-            &copy; 2025 All Rights Reserved to Nabd Community.
+        <div class="footer-logo">Nabd Community</div>
+        <p style="color: #888; font-size: 0.9rem;">
+            نؤمن بأن التعافي رحلة جماعية، وأن الوعي هو أول طريق النور.
+        </p>
+        <div class="social-links">
+            <a href="https://t.me/Nabd4U" class="social-btn"><i class="fa-brands fa-telegram"></i></a>
+            <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-btn"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+        <div class="copyright" style="font-size: 0.8rem; opacity: 0.6;">
+            &copy; 2025 All Rights Reserved.
         </div>
     </footer>
 
     <!-- سكريبتات الجافاسكريبت -->
     <script>
-        // 1. إخفاء شاشة التحميل
+        // 1. إخفاء شاشة التحميل بسلاسة
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');
             setTimeout(() => {
                 preloader.style.opacity = '0';
-                setTimeout(() => { preloader.style.display = 'none'; }, 500);
-            }, 1000);
+                preloader.style.visibility = 'hidden';
+            }, 800);
         });
 
-        // 2. رسم خلفية الـ Pulse
+        // 2. القائمة الجانبية للموبايل
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+        }
+        document.getElementById('overlay').addEventListener('click', toggleMenu);
+
+        // 3. تغيير ستايل الهيدر عند السكرول
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        // 4. خلفية الشبكة (Particles Network) - رمز للتواصل
         const canvas = document.getElementById('matrix-bg');
         const ctx = canvas.getContext('2d');
-        let width, height;
-        const lines = [];
+        let particlesArray;
 
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        
-        for (let i = 0; i < 3; i++) {
-            lines.push({ y: Math.random() * window.innerHeight, speed: 1 + Math.random() * 2, offset: Math.random() * 100 });
-        }
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-        function animateBg() {
-            ctx.clearRect(0, 0, width, height);
-            lines.forEach(line => {
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            draw() {
                 ctx.beginPath();
-                ctx.moveTo(0, line.y);
-                for (let x = 0; x < width; x+=5) {
-                    const y = line.y + Math.sin((x + line.offset) * 0.01) * 20 + (Math.random() > 0.98 ? (Math.random() - 0.5) * 50 : 0);
-                    ctx.lineTo(x, y);
-                }
-                ctx.strokeStyle = `rgba(138, 43, 226, ${0.1 + Math.random() * 0.1})`;
-                ctx.lineWidth = 1;
-                ctx.stroke();
-                line.offset += line.speed;
-            });
-            requestAnimationFrame(animateBg);
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
         }
 
-        window.addEventListener('resize', resize);
-        resize();
-        animateBg();
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 15000; 
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 0.4) - 0.2;
+                let directionY = (Math.random() * 0.4) - 0.2;
+                let color = '#8a2be2';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
 
-        // 3. أنيميشن السكرول
-        const revealElements = document.querySelectorAll('.reveal');
-        const scrollObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('active');
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + 
+                                   ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    if (distance < (canvas.width/7) * (canvas.height/7)) {
+                        opacityValue = 1 - (distance/20000);
+                        ctx.strokeStyle = 'rgba(138, 43, 226,' + opacityValue * 0.15 + ')';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            init();
+        });
+
+        init();
+        animate();
+
+        // 5. 3D Tilt Effect للبطاقات
+        const cards = document.querySelectorAll('.tilt-card');
+        
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -5; // Max rotation deg
+                const rotateY = ((x - centerX) / centerX) * 5;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
             });
-        }, { threshold: 0.15 });
-        revealElements.forEach(el => scrollObserver.observe(el));
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
+            });
+        });
+
+        // 6. ظهور العناصر عند السكرول (Scroll Reveal)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     </script>
 </body>
 </html>
