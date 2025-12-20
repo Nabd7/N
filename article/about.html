@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>من نحن | حكاية نبض</title>
+    <title>قصة نبض | The Story</title>
     
-    <!-- الخطوط والأيقونات -->
+    <!-- الخطوط -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&family=Outfit:wght@300;700&display=swap" rel="stylesheet">
@@ -14,382 +14,349 @@
     <link rel="icon" type="image/png" href="https://img.icons8.com/?size=100&id=47294&format=png&color=000000">
 
     <style>
-        /* --- المتغيرات والتأسيس (نفس الهوية) --- */
+        /* --- الأساسيات --- */
         :root {
             --bg-dark: #050507;
             --primary: #8a2be2;
-            --primary-dark: #5e17a3;
             --accent: #00f2ff;
             --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
             --text-muted: #b0b0b0;
             --font-ar: 'Cairo', sans-serif;
             --font-en: 'Outfit', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
             font-family: var(--font-ar);
             overflow-x: hidden;
-            line-height: 1.8;
+            line-height: 1.7;
         }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, var(--primary), var(--accent)); border-radius: 10px; }
-
-        /* --- خلفية الكانفاس --- */
+        /* --- الخلفية --- */
         canvas#matrix-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
         }
 
         /* --- الناف بار --- */
         nav {
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(5, 5, 7, 0.85);
-            backdrop-filter: blur(20px);
+            padding: 20px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: rgba(5,5,7,0.8); backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--glass-border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
         }
+        .logo { font-size: 1.5rem; font-weight: 900; color: #fff; text-decoration: none; }
+        .logo i { color: var(--primary); margin-left: 5px; }
+        .back-btn { 
+            color: var(--text-muted); text-decoration: none; font-weight: 600; 
+            transition: 0.3s; font-size: 0.9rem;
+        }
+        .back-btn:hover { color: var(--accent); }
 
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 900;
-            color: var(--text-main);
-            text-decoration: none;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .logo i { color: var(--primary); animation: beat 2s infinite; }
-
-        .back-home {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: 0.3s;
-            display: flex; align-items: center; gap: 8px;
-            padding: 8px 15px;
-            border-radius: 20px;
-            border: 1px solid transparent;
-        }
-        .back-home:hover { 
-            color: var(--text-main); 
-            background: var(--glass); 
-            border-color: var(--glass-border);
-        }
-
-        /* --- الهيدر --- */
-        .page-header {
-            text-align: center;
-            padding: 100px 20px 60px;
+        /* --- الهيرو (العنوان) --- */
+        .hero-section {
+            min-height: 80vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 100px 20px 50px;
             position: relative;
         }
-        .page-header::before {
-            content: '';
-            position: absolute;
-            width: 400px; height: 400px;
-            background: var(--primary);
-            filter: blur(200px);
-            opacity: 0.15;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: -1;
+        
+        .big-title {
+            font-size: 4.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 20px;
+            background: linear-gradient(180deg, #fff, #666);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .big-title span {
+            color: var(--primary); -webkit-text-fill-color: var(--primary);
+            font-family: var(--font-en); letter-spacing: 2px;
+        }
+        
+        .hero-desc {
+            font-size: 1.3rem; color: var(--text-muted); max-width: 700px;
+            margin-bottom: 40px;
         }
 
-        .page-header h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            font-weight: 900;
-            animation: fadeInDown 1s ease;
-        }
-        .page-header span { 
-            color: transparent;
-            background: linear-gradient(90deg, var(--accent), var(--primary));
-            -webkit-background-clip: text;
-        }
-        .page-header p {
-            color: var(--text-muted);
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
-            animation: fadeIn 1.5s ease;
+        .scroll-indicator {
+            position: absolute; bottom: 40px;
+            animation: bounce 2s infinite; opacity: 0.7;
         }
 
-        /* --- حاوية المحتوى --- */
-        .content-container {
-            max-width: 900px;
-            margin: 0 auto 80px;
-            padding: 0 5%;
+        /* --- قسم القصة (Split Layout) --- */
+        .story-section {
+            padding: 80px 10%;
+            display: flex; align-items: center; gap: 50px;
+            flex-wrap: wrap;
         }
+        .story-section.reverse { flex-direction: row-reverse; }
 
-        .story-card {
-            background: var(--glass);
+        .story-content { flex: 1; min-width: 300px; }
+        .story-visual { 
+            flex: 1; min-width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(138,43,226,0.1), transparent);
             border: 1px solid var(--glass-border);
             border-radius: 30px;
-            padding: 50px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            animation: fadeInUp 1s ease 0.3s forwards;
-            opacity: 0;
-            transform: translateY(30px);
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
+        }
+        
+        .story-visual i { font-size: 6rem; color: rgba(255,255,255,0.05); }
+        .story-visual::after {
+            content: ''; position: absolute; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/cubes.png');
+            opacity: 0.05;
         }
 
-        .story-section { margin-bottom: 50px; }
-        .story-section:last-child { margin-bottom: 0; }
+        .section-tag {
+            color: var(--accent); font-weight: 700; letter-spacing: 1px;
+            font-size: 0.9rem; margin-bottom: 10px; display: block;
+        }
+        .story-content h2 { font-size: 2.5rem; margin-bottom: 20px; color: #fff; }
+        .story-content p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px; }
 
-        h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: white;
-            display: flex; align-items: center; gap: 15px;
+        /* --- الـ DNA (القيم) --- */
+        .dna-section { padding: 100px 5%; text-align: center; }
+        .cards-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px; margin-top: 50px;
         }
-        h2 i { color: var(--primary); font-size: 1.5rem; }
+        .dna-card {
+            background: var(--glass); border: 1px solid var(--glass-border);
+            padding: 40px 30px; border-radius: 20px;
+            transition: 0.4s; position: relative; overflow: hidden;
+        }
+        .dna-card:hover {
+            transform: translateY(-10px); border-color: var(--primary);
+            background: rgba(138,43,226,0.05);
+        }
+        .card-number {
+            position: absolute; top: 10px; left: 20px;
+            font-family: var(--font-en); font-size: 3rem; font-weight: 900;
+            color: rgba(255,255,255,0.03);
+        }
+        .dna-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--accent); }
 
-        p {
-            font-size: 1.1rem;
-            color: #ccc;
-            margin-bottom: 20px;
-            line-height: 1.9;
+        /* --- الأسئلة الشائعة (Accordion) --- */
+        .faq-section { padding: 80px 10%; max-width: 900px; margin: 0 auto; }
+        .faq-title { text-align: center; margin-bottom: 50px; font-size: 2rem; }
+        
+        .accordion-item {
+            background: var(--glass); border: 1px solid var(--glass-border);
+            margin-bottom: 15px; border-radius: 15px; overflow: hidden;
         }
-
-        .highlight-text {
-            color: var(--accent);
-            font-weight: 700;
+        .accordion-header {
+            padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            font-weight: 700; color: #eee; transition: 0.3s;
         }
-
-        /* --- اقتباس --- */
-        .quote-box {
-            background: linear-gradient(90deg, rgba(138,43,226,0.1), transparent);
-            border-right: 4px solid var(--primary);
-            padding: 25px;
-            border-radius: 10px;
-            font-size: 1.15rem;
-            font-style: italic;
-            margin: 30px 0;
-            color: #eee;
+        .accordion-header:hover { background: rgba(255,255,255,0.05); }
+        .accordion-body {
+            max-height: 0; overflow: hidden; transition: 0.4s ease;
+            padding: 0 20px; color: var(--text-muted);
         }
-
-        /* --- شبكة القيم --- */
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .value-item {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid var(--glass-border);
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            transition: 0.3s;
-        }
-        .value-item:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            background: rgba(0, 242, 255, 0.05);
-        }
-        .value-item i {
-            font-size: 2rem;
-            color: var(--accent);
-            margin-bottom: 15px;
-            display: block;
-        }
-        .value-item h3 { font-size: 1.1rem; margin-bottom: 5px; color: white; }
-        .value-item p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0; }
+        .accordion-item.active .accordion-body { padding: 20px; max-height: 200px; }
+        .accordion-item.active .accordion-header i { transform: rotate(180deg); color: var(--primary); }
 
         /* --- الفوتر --- */
         footer {
-            text-align: center;
-            padding: 40px 20px;
-            border-top: 1px solid var(--glass-border);
-            background: #020203;
+            text-align: center; padding: 50px 20px; border-top: 1px solid var(--glass-border);
+            margin-top: 50px; background: #020202;
         }
-        .footer-socials { margin-bottom: 15px; }
-        .footer-socials a {
-            color: var(--text-muted);
-            font-size: 1.4rem;
-            margin: 0 10px;
-            transition: 0.3s;
-        }
-        .footer-socials a:hover { color: var(--primary); transform: scale(1.2); }
+        
+        /* --- الأنيميشن --- */
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
 
-        /* --- أنيميشن --- */
-        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* --- موبايل --- */
+        /* --- الموبايل --- */
         @media (max-width: 768px) {
-            .page-header h1 { font-size: 2.5rem; }
-            .story-card { padding: 30px 20px; }
+            .big-title { font-size: 3rem; }
+            .story-section { padding: 50px 5%; gap: 30px; text-align: center; }
+            .story-section.reverse { flex-direction: column; }
+            .story-content h2 { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- الخلفية -->
     <canvas id="matrix-bg"></canvas>
 
-    <!-- الناف بار -->
     <nav>
-        <a href="../index.html" class="logo">
-            <i class="fa-solid fa-heart-pulse"></i> نبض
-        </a>
-        <a href="../index.html" class="back-home">
-            <i class="fa-solid fa-arrow-right"></i> الرئيسية
-        </a>
+        <a href="../index.html" class="logo"><i class="fa-solid fa-heart-pulse"></i> نبض</a>
+        <a href="../index.html" class="back-btn"><i class="fa-solid fa-arrow-right"></i> الرجوع للرئيسية</a>
     </nav>
 
-    <!-- الهيدر -->
-    <header class="page-header">
-        <h1>حكاية <span>نبض</span></h1>
-        <p>مش مجرد جروب شات.. دي رحلة، ونس، وحياة.</p>
+    <!-- 1. الهيرو -->
+    <header class="hero-section">
+        <div class="reveal active">
+            <h1 class="big-title">ما وراء<br><span>NABD</span></h1>
+            <p class="hero-desc">
+                ليست مجرد منصة، بل هي محاولة لخلق مساحة بيضاء وسط الضجيج.
+                نحن هنا لنسمعك، ندعمك، ونعيد اكتشاف الطريق سوياً.
+            </p>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fa-solid fa-chevron-down"></i>
+        </div>
     </header>
 
-    <!-- المحتوى -->
-    <main class="content-container">
-        <div class="story-card">
-            
-            <!-- القسم الأول: المقدمة -->
-            <div class="story-section">
-                <h2><i class="fa-regular fa-lightbulb"></i> إحنا مين؟</h2>
-                <p>
-                    في وسط دوشة العالم، وزحمة الأحكام، والضغوط اللي بنعيشها كل يوم، كان لازم يكون فيه مكان نفصل فيه. مكان نرجع فيه لطبيعتنا من غير أقنعة، ومن غير خوف. من هنا اتولدت فكرة <span class="highlight-text">"نبض"</span>.
-                </p>
-                <p>
-                    إحنا مجموعة شباب قررنا نخلق <strong>Chill Zone</strong> آمنة، هدفها الأساسي هو "الدعم النفسي" والوعي الحقيقي. إحنا مش دكاترة ولا معالجين (وإن كان دورنا بيكملهم)، إحنا "رفقاء رحلة". بنحاول نفهم نفسنا، ونواجه تحدياتنا بشجاعة عشان نعيش حياة سوية.
-                </p>
-            </div>
-
-            <!-- اقتباس -->
-            <div class="quote-box">
-                <i class="fa-solid fa-quote-right" style="color: var(--primary); margin-left: 10px;"></i>
-                نبض هو المكان اللي صوتك فيه مسموع، ومشاعرك مُقدّرة، وهويتك محمية. هنا بنطبطب على الروح، مش بنجلد الذات.
-            </div>
-
-            <!-- القسم الثاني: الفلسفة -->
-            <div class="story-section">
-                <h2><i class="fa-solid fa-fingerprint"></i> فلسفتنا</h2>
-                <p>
-                    إحنا مؤمنين إن <strong>"الوعي هو أول طريق التغيير"</strong>. عشان كده مش بنكتفي بالفضفضة، إحنا بنشارك محتوى يوعي، وبنناقش أفكار بتساعدنا نفهم جذور مشاكلنا.
-                    بنرفض الانجراف وراء الموجة السائدة اللي بتحاول تطبّع مع الغلط، وفي نفس الوقت بنرفض القسوة المفرطة. اخترنا الطريق التالت: <span class="highlight-text">الفهم، الاحتواء، والتعافي.</span>
-                </p>
-            </div>
-
-            <!-- القيم -->
-            <div class="story-section">
-                <h2><i class="fa-regular fa-gem"></i> قيمنا</h2>
-                <div class="values-grid">
-                    <div class="value-item">
-                        <i class="fa-solid fa-hands-holding-circle"></i>
-                        <h3>الدعم الأخوي</h3>
-                        <p>بنسند بعض وقت الضعف.</p>
-                    </div>
-                    <div class="value-item">
-                        <i class="fa-solid fa-brain"></i>
-                        <h3>الوعي والنضج</h3>
-                        <p>لا للمحتوى السطحي.</p>
-                    </div>
-                    <div class="value-item">
-                        <i class="fa-solid fa-shield-halved"></i>
-                        <h3>أمان تام</h3>
-                        <p>خصوصيتك خط أحمر.</p>
-                    </div>
-                    <div class="value-item">
-                        <i class="fa-regular fa-face-smile-beam"></i>
-                        <h3>بلا أحكام</h3>
-                        <p>تعالى زي ما أنت.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ختام -->
-            <div class="story-section" style="text-align: center; margin-top: 50px;">
-                <p>لو حسيت إنك تايه، افتكر إنك مش لوحدك.</p>
-                <a href="https://t.me/Nabd4U" target="_blank" style="display: inline-block; padding: 12px 30px; background: linear-gradient(45deg, var(--primary), #5e17a3); color: white; border-radius: 50px; text-decoration: none; font-weight: 700; box-shadow: 0 0 20px rgba(138,43,226,0.4); margin-top: 10px;">
-                    انضم لعيلتك التانية ❤️
-                </a>
-            </div>
-
+    <!-- 2. القصة (البداية) -->
+    <section class="story-section reveal">
+        <div class="story-content">
+            <span class="section-tag">THE ORIGIN</span>
+            <h2>كيف بدأت الفكرة؟</h2>
+            <p>
+                في عالم يمتلئ بالأحكام القاسية والتصنيفات الجاهزة، شعرنا بالحاجة لمكان مختلف. مكان لا يُسألك فيه "من أنت؟" بل "كيف حالك حقاً؟".
+            </p>
+            <p>
+                بدأت "نبض" كمبادرة شبابية بسيطة، هدفها توفير <strong>Safe Zone</strong> لكل شخص بيعاني في صمت، سواء من ميول غير مرغوبة، عادات قهرية، أو مجرد شعور بالوحدة.
+            </p>
         </div>
-    </main>
+        <div class="story-visual">
+            <i class="fa-solid fa-lightbulb"></i>
+        </div>
+    </section>
+
+    <!-- 3. المنهجية (عكس الاتجاه) -->
+    <section class="story-section reverse reveal">
+        <div class="story-content">
+            <span class="section-tag">OUR METHOD</span>
+            <h2>الطريق الثالث</h2>
+            <p>
+                نحن نرفض التطرف في الأحكام، ونرفض أيضاً الاستسلام للتيار السائد. نحن نؤمن بـ "الطريق الثالث": <span style="color: var(--primary); font-weight:700;">التعافي بوعي ورحمة.</span>
+            </p>
+            <p>
+                نستخدم العلم النفسي، الدعم الجماعي، والروحانيات المتزنة لنبني جسراً نحو الذات الحقيقية، بعيداً عن جلد الذات.
+            </p>
+        </div>
+        <div class="story-visual">
+            <i class="fa-solid fa-road"></i>
+        </div>
+    </section>
+
+    <!-- 4. جينات المجتمع (القيم) -->
+    <section class="dna-section reveal">
+        <h2 style="font-size: 2.5rem; margin-bottom: 10px;">جينات المجتمع</h2>
+        <p style="color: var(--text-muted);">المبادئ التي لا نتنازل عنها</p>
+        
+        <div class="cards-grid">
+            <div class="dna-card">
+                <div class="card-number">01</div>
+                <h3>السرية المقدسة</h3>
+                <p>ما يقال في نبض، يموت في نبض. هويتك وأسرارك خط أحمر لا يمكن تجاوزه.</p>
+            </div>
+            <div class="dna-card">
+                <div class="card-number">02</div>
+                <h3>صفر أحكام</h3>
+                <p>نحن لا نلعب دور القاضي. نحن أقران، نخطئ ونصيب، ونتعلم من سقطاتنا سوياً.</p>
+            </div>
+            <div class="dna-card">
+                <div class="card-number">03</div>
+                <h3>الوعي قبل النصيحة</h3>
+                <p>لا نقدم نصائح معلبة. نحن نقدم المعرفة والأدوات لتتخذ أنت قرارك بحرية.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. الأسئلة الشائعة -->
+    <section class="faq-section reveal">
+        <h2 class="faq-title">أسئلة قد تدور في ذهنك</h2>
+        
+        <div class="accordion-item">
+            <div class="accordion-header">
+                هل يجب أن أكشف عن هويتي الحقيقية؟
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="accordion-body">
+                إطلاقاً. يمكنك المشاركة بأي اسم مستعار تفضله. نحن نهتم بـ "ما بداخلك" وليس "من تكون" في العالم الخارجي.
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header">
+                هل أنتم أطباء نفسيون؟
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="accordion-body">
+                نحن مجتمع دعم للأقران (Peer Support Community). نشارك تجاربنا ونستعين بمصادر علمية، لكننا لا نعوض العلاج الطبي المتخصص في الحالات المتقدمة.
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header">
+                هل المجتمع مختلط؟
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="accordion-body">
+                المجتمع يهدف لتوفير بيئة آمنة ونظيفة للجميع، مع الحفاظ على ضوابط صارمة تمنع أي تجاوزات أو علاقات جانبية تضر بالتعافي.
+            </div>
+        </div>
+    </section>
 
     <!-- الفوتر -->
     <footer>
-        <div class="footer-socials">
-            <a href="https://t.me/Nabd4U"><i class="fa-brands fa-telegram"></i></a>
-            <a href="#"><i class="fa-brands fa-instagram"></i></a>
-        </div>
-        <p style="margin-top: 10px; color: #666; font-size: 0.8rem;">جميع الحقوق محفوظة لمجتمع نبض © 2025</p>
+        <h3 style="font-family: var(--font-en); font-size: 2rem; margin-bottom: 20px;">Nabd Community</h3>
+        <p style="color: #666; font-size: 0.9rem;">
+            صُنع بحب وأمل © 2025
+        </p>
     </footer>
 
-    <!-- سكريبت الخلفية -->
+    <!-- سكريبتات -->
     <script>
+        // 1. Accordion Logic
+        const headers = document.querySelectorAll('.accordion-header');
+        headers.forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+
+        // 2. Scroll Reveal
+        const revealElements = document.querySelectorAll('.reveal');
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.15 });
+        revealElements.forEach(el => scrollObserver.observe(el));
+
+        // 3. Matrix Background (Consistent)
         const canvas = document.getElementById('matrix-bg');
         const ctx = canvas.getContext('2d');
-        let particlesArray;
-
-        function initCanvas() {
+        
+        function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            particlesArray = [];
-            let numberOfParticles = (canvas.height * canvas.width) / 15000;
-            for (let i = 0; i < numberOfParticles; i++) {
-                let size = (Math.random() * 2) + 1;
-                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-                let directionX = (Math.random() * 0.2) - 0.1;
-                let directionY = (Math.random() * 0.2) - 0.1;
-                particlesArray.push({x, y, directionX, directionY, size});
-            }
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        const particles = [];
+        for(let i=0; i<30; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 2 + 1,
+                d: Math.random() * 0.5
+            });
         }
 
         function animate() {
-            requestAnimationFrame(animate);
-            ctx.clearRect(0, 0, innerWidth, innerHeight);
-            
-            for (let i = 0; i < particlesArray.length; i++) {
-                let p = particlesArray[i];
-                if (p.x > canvas.width || p.x < 0) p.directionX = -p.directionX;
-                if (p.y > canvas.height || p.y < 0) p.directionY = -p.directionY;
-                p.x += p.directionX;
-                p.y += p.directionY;
-                
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(138, 43, 226, 0.4)';
+            particles.forEach(p => {
+                p.y -= p.d;
+                if(p.y < 0) p.y = canvas.height;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2, false);
-                ctx.fillStyle = '#8a2be2';
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
                 ctx.fill();
-
-                for (let j = i; j < particlesArray.length; j++) {
-                    let p2 = particlesArray[j];
-                    let distance = ((p.x - p2.x) * (p.x - p2.x)) + ((p.y - p2.y) * (p.y - p2.y));
-                    if (distance < (canvas.width/7) * (canvas.height/7)) {
-                        ctx.strokeStyle = `rgba(138, 43, 226, ${1 - distance/20000})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
-                    }
-                }
-            }
+            });
+            requestAnimationFrame(animate);
         }
-
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
         animate();
     </script>
 </body>
